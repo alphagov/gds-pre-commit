@@ -8,11 +8,11 @@ One of the easiest ways to get started with pre-commit hooks is by using the [pr
 
 To get started you can either run:
 
-`$ brew install pre-commit` (on Mac)
+`$ brew install pre-commit`
 
 or
 
-`$ pip install pre-commit` (on Linux or Mac)
+`$ pip install pre-commit`
 
 ### Configuring pre-commit
 We recommend using some of the hooks that are supported out of the box, as well as installing the [detect-secrets hook](https://github.com/Yelp/detect-secrets).
