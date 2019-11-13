@@ -15,12 +15,12 @@ or
 `$ pip install pre-commit` (on Linux or Mac)
 
 ### Configuring pre-commit
-We recommend using some of the plugins that come with the framework, as well as installing the [detect-secrets plugin](https://github.com/Yelp/detect-secrets).
+We recommend using some of the hooks that are supported out of the box, as well as installing the [detect-secrets hook](https://github.com/Yelp/detect-secrets).
 
 An example [.pre-commit-config.yaml file](https://github.com/alphagov/gds-pre-commit/blob/add-yaml/.pre-commit-config.yaml) used to set up your pre-commit config can be found in this repository.
 
 ## detect-secrets
-The detect-secrets pre-commit plugin requires some minor configuration before it is run with the framework.
+The detect-secrets pre-commit hook requires some minor configuration before it is run with the framework.
 
 First you will need to install detect-secrets manually:
 
@@ -32,7 +32,7 @@ Then run the following commands in your local repository:
 
 `$ detect-secrets audit .secrets.baseline`
 
-This will create a baseline for your repository, initialising plugins used and then scan all of the files in your repository. It will ask you about potential secrets it finds and if they are to real secrets or false positives.
+This will create a baseline for your repository, initialising [plugins](https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins) used and then scan all of the files in your repository. It will ask you about potential secrets it finds and if they are to real secrets or false positives.
 
 ## Initial pre-commit execution
 Once you have followed the steps above, the last steps to follow are as follows.
