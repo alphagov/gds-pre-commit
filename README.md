@@ -17,7 +17,7 @@ or
 ### Configuring pre-commit
 We recommend using some of the hooks that are supported out of the box, as well as installing the [detect-secrets hook](https://github.com/Yelp/detect-secrets).
 
-An example [.pre-commit-config.yaml file](https://github.com/alphagov/gds-pre-commit/blob/add-yaml/.pre-commit-config.yaml) used to set up your pre-commit config can be found in this repository.
+An example [.pre-commit-config.yaml file](https://github.com/alphagov/gds-pre-commit/blob/add-yaml/.pre-commit-config.yaml) used to set up your pre-commit config can be found in this repository. The .pre-commit-config.yaml file should be added to the root of your repository.
 
 ## detect-secrets
 The detect-secrets pre-commit hook requires some minor configuration before it is run with the framework.
@@ -46,3 +46,8 @@ Run an initial check to ensure everything is installed and working correctly:
 `$ pre-commit run --all-files`
 
 Once that's completed, you're all done! If you want to add any other hooks, take a look at the [extensive list](https://pre-commit.com/hooks.html). There are various handy linters and formatters for Go, Ruby, Python and Terraform.
+
+## Maintaining your hooks
+You can update your hooks by periodically running the following command:
+
+`$ pre-commit autoupdate`
