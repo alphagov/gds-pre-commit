@@ -34,7 +34,7 @@ Then run the following commands in your local repository:
 
 This will create a baseline for your repository, initialising [plugins](https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins) used and then scan all of the files in your repository. It will ask you about potential secrets it finds and if they are to real secrets or false positives.
 
-The newly creted `.secrets.baseline` file should be committed to Github.
+The newly created `.secrets.baseline` file should be committed to Github.
 
 ## Initial pre-commit execution
 Once you have followed the steps above, the last steps to follow are as follows.
