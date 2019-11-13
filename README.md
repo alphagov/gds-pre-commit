@@ -17,7 +17,7 @@ or
 ### Configuring pre-commit
 We recommend using some of the hooks that are supported out of the box, as well as installing the [detect-secrets hook](https://github.com/Yelp/detect-secrets).
 
-An example [.pre-commit-config.yaml file](https://github.com/alphagov/gds-pre-commit/blob/add-yaml/.pre-commit-config.yaml) used to set up your pre-commit config can be found in this repository. The .pre-commit-config.yaml file should be added to the root of your repository.
+An example [.pre-commit-config.yaml file](https://github.com/alphagov/gds-pre-commit/blob/add-yaml/.pre-commit-config.yaml) used to set up your pre-commit config can be found in this repository. The .pre-commit-config.yaml file should be added to the root of your repository and committed to Github.
 
 ## detect-secrets
 The detect-secrets pre-commit hook requires some minor configuration before it is run with the framework.
@@ -33,6 +33,8 @@ Then run the following commands in your local repository:
 `$ detect-secrets audit .secrets.baseline`
 
 This will create a baseline for your repository, initialising [plugins](https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins) used and then scan all of the files in your repository. It will ask you about potential secrets it finds and if they are to real secrets or false positives.
+
+The newly creted `.secrets.baseline` file should be committed to Github.
 
 ## Initial pre-commit execution
 Once you have followed the steps above, the last steps to follow are as follows.
