@@ -37,7 +37,7 @@ This will create a baseline for your repository, initialising [plugins](https://
 ## Initial pre-commit execution
 Once you have followed the steps above, the last steps to follow are as follows.
 
-Run the following command to install your pre-commit hooks to git:
+Run the following command to install your pre-commit hooks to git (note that this command will need to be run once locally by every one who uses your repo):
 
 `$ pre-commit install`
 
