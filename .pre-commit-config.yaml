@@ -8,5 +8,5 @@ repos:
     rev: v0.13.0
     hooks:
     -   id: detect-secrets
-        args: ['--baseline', '.secrets.baseline']
+        args: ['--baseline', '.gds/.secrets.baseline']
         exclude: .*/tests/.*

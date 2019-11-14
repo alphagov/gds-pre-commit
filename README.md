@@ -28,13 +28,15 @@ First you will need to install detect-secrets manually:
 
 Then run the following commands in your local repository:
 
-`$ detect-secrets scan > .secrets.baseline`
+`$ mkdir .gds`
 
-`$ detect-secrets audit .secrets.baseline`
+`$ detect-secrets scan > .gds/.secrets.baseline`
+
+`$ detect-secrets audit .gds/.secrets.baseline`
 
 This will create a baseline for your repository, initialising [plugins](https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins) used and then scan all of the files in your repository. It will ask you about potential secrets it finds and if they are to real secrets or false positives.
 
-The newly created `.secrets.baseline` file should be committed to Github.
+The newly created `.gds/.secrets.baseline` file should be committed to Github.
 
 ## Initial pre-commit execution
 Once you have followed the steps above, the last steps to follow are as follows.
