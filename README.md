@@ -61,6 +61,16 @@ You can update your hooks by periodically running the following command:
 
 `$ pre-commit autoupdate`
 
+## Supported editors
+This pre-commit hook has been tested and is working with the following editors:
+
+* Atom
+* VScode
+* IntelliJ
+* Pycharm
+* Emacs
+* Vim (with Fugitive.vim)
+
 ## Other useful hooks/plugins
 
 **Please note that these hooks are found on the pre-commit website but have not all been tested**
