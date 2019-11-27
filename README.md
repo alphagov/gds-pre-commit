@@ -5,7 +5,7 @@ pip install pre-commit detect-secrets
 mkdir .gds
 detect-secrets scan > .gds/.secrets.baseline
 detect-secrets audit .gds/.secrets.baseline
-pre-commit install -c .gds/.pre-commit-config.yaml
+pre-commit install -c .gds/.pre-commit-config.yaml #this file is from this repo
 ```
 
 Run an initial check to ensure everything is installed and working correctly:
