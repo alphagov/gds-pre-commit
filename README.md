@@ -22,7 +22,7 @@ or
 ### Configuring pre-commit
 We recommend using some of the hooks that are supported out of the box, as well as installing the [detect-secrets hook](https://github.com/Yelp/detect-secrets).
 
-An example [.gds/.pre-commit-config.yaml file](https://github.com/alphagov/gds-pre-commit/blob/add-yaml/.pre-commit-config.yaml) used to set up your pre-commit config can be found in this repository. The .pre-commit-config.yaml file should be added to a .gds directory in the root of your repository and committed to Github.
+An example [.gds/.pre-commit-config.yaml file](.gds/.pre-commit-config.yaml) used to set up your pre-commit config can be found in this repository. The .pre-commit-config.yaml file should be added to a .gds directory in the root of your repository and committed to Github.
 
 ## detect-secrets
 The detect-secrets pre-commit hook requires some minor configuration before it is run with the framework.
