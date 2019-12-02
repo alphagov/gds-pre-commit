@@ -59,7 +59,7 @@ Once that's completed, you're all done! If you want to add any other hooks, take
 ## Maintaining your hooks
 You can update your hooks by periodically running the following command:
 
-`$ pre-commit autoupdate`
+`$ pre-commit autoupdate -c .gds/.pre-commit-config.yaml`
 
 ## Supported editors
 This pre-commit hook has been tested and is working with the following editors:
