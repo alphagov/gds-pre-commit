@@ -12,6 +12,17 @@ We have an install script possibly wrapped up in GDS cli which registers
 users and installs the hooks into their global git config rather than 
 installing per repository. 
 
+Users register which means we can track uptake and registration allows us 
+to track usage. It should also mean there's a simple upgrade process if our 
+hooks change. 
+
+## The hooks 
+
+As well as the 3rd party hooks we've already implemented we can implement 
+our own hooks alongside allowing us to detect other things. 
+
+One of those in-house hooks can report to us when the hooks run. 
+
 ## How registration works 
 
 The install script interrogates their existing global config 
