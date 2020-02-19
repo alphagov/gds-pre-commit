@@ -3,3 +3,4 @@ paramiko
 pexpect
 gitpython
 fire
+requests

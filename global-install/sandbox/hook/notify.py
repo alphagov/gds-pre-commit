@@ -138,7 +138,7 @@ class Hook:
                 value = terms[1]
                 if key in wanted:
                     post_data[key] = value
-        endpoint = os.environ.get("ENDPOINT")
+
         ssh_file = get_ssh_key()
         print(ssh_file)
         private_key = load_private_key(ssh_file, ssh_password)
@@ -154,6 +154,8 @@ class Hook:
             merge_includes=False
         )
         git_config.set_value("gds", "cyber-bearer", sign).release()
+        git_config.set_value("gds", "cyber-raw", post_data["md5"]).release()
+        git_config.set_value("gds", "github-user", username).release()
 
         divider()
         print("Signed")
@@ -162,8 +164,20 @@ class Hook:
 
     @classmethod
     def notify(cls):
-        post_data["commit"] = {"number": 12524, "type": "issue", "action": "show"}
+        home = os.environ.get("HOME")
+        endpoint = os.environ.get("ENDPOINT")
 
+
+        git_config = git.GitConfigParser(
+            f"{home}/.gitconfig",
+            read_only=True,
+            merge_includes=False
+        )
+
+        post_data = {"commit": {"number": 12524, "type": "issue", "action": "show"}}
+        sign = git_config.get_value("gds", "cyber-bearer")
+        post_data["md5"] = git_config.get_value("gds", "cyber-raw")
+        post_data["username"] = git_config.get_value("gds", "github-user")
         headers = {
             "Authorization": f"Bearer {sign}",
             "Content-Type": "application/json",
