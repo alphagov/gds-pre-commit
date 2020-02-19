@@ -11,9 +11,11 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import utils
 from cryptography.exceptions import InvalidSignature
 import paramiko
-from paramiko.message import Message
 import getpass
 import pexpect
+import git
+from git import Repo
+import fire
 
 
 def repeat_to_length(one_time, length):
@@ -88,6 +90,12 @@ def read_file(file_path, flags="r"):
     return contents
 
 
+def write_file(file_path, content, flags="w"):
+    file_handle = open(file_path, flags)
+    file_handle.write(content)
+    file_handle.close()
+
+
 def calc_md5(source_string):
     """Implement hashlib to calculate md5 from a given string"""
     undigested = source_string.encode("utf-8")
@@ -111,71 +119,80 @@ def get_username(private_key, ssh_password):
     return username
 
 
-def notify(ssh_password=None):
-    token = os.environ.get("TOKEN")
-    endpoint = os.environ.get("ENDPOINT")
-    post_data = {"commit": {"number": 12524, "type": "issue", "action": "show"}}
+class Hook:
+    @classmethod
+    def install(cls):
+        ssh_password = getpass.getpass("Password:")
+        post_data = {}
+        result = subprocess.run(
+            ["git", "config", "--global", "-l"], stdout=subprocess.PIPE
+        )
+        output = result.stdout.decode("utf-8")
+        lines = output.split("\n")
+        wanted = ["user.name", "user.email"]
+        for line in lines:
+            terms = line.split("=")
+            if len(terms) > 1:
+                key = terms[0]
+                value = terms[1]
+                if key in wanted:
+                    post_data[key] = value
+        endpoint = os.environ.get("ENDPOINT")
+        ssh_file = get_ssh_key()
+        print(ssh_file)
+        private_key = load_private_key(ssh_file, ssh_password)
+        username = get_username(private_key, ssh_password)
+        post_data["username"] = username
+        post_data["md5"] = calc_md5(json.dumps(post_data))
+        sign = private_key_sign(post_data["md5"], private_key)
+        home = os.environ.get("HOME")
 
-    post_data["md5"] = calc_md5(json.dumps(post_data["commit"]))
+        # this is WIP
+        repo = Repo(config_level="global")
+        repo.config_writer(config_level="global").set_value(
+            "gds", "cyber.bearer", sign
+        ).release()
+        git_config = git.GitConfigParser(
+            [os.path.normpath(os.path.expanduser(f"{home}/.gitconfig"))]
+        )
+        git_config.set_value("gds", "cyber.bearer", sign).release()
 
-    ssh_file = get_ssh_key()
-    print(ssh_file)
-    private_key = load_private_key(ssh_file, ssh_password)
-    username = get_username(private_key, ssh_password)
-    post_data["username"] = username
-    public_key = load_public_key(f"{ssh_file}.pub")
+        divider()
+        print("Signed")
+        print(sign)
+        divider()
 
-    sign = private_key_sign(post_data["md5"], private_key)
+    @classmethod
+    def notify(cls):
+        post_data["commit"] = {"number": 12524, "type": "issue", "action": "show"}
 
-    divider()
-    print("Signed")
-    print(sign)
-    divider()
+        headers = {
+            "Authorization": f"Bearer {sign}",
+            "Content-Type": "application/json",
+            "Accept": "*/*",
+            "User-Agent": "GitHub/Hook/pre-commit",
+        }
 
-    verified = public_key_verify(sign, post_data["md5"], public_key)
+        post_data["headers"] = headers
 
-    divider()
-    print("Verified?")
-    print(verified)
-    divider()
+        body = json.dumps(post_data, indent=4)
 
-    result = subprocess.run(["git", "config", "--global", "-l"], stdout=subprocess.PIPE)
-    output = result.stdout.decode("utf-8")
-    lines = output.split("\n")
-    wanted = ["user.name", "user.email"]
-    for line in lines:
-        terms = line.split("=")
-        if len(terms) > 1:
-            key = terms[0]
-            value = terms[1]
-            if key in wanted:
-                post_data[key] = value
+        write_file("../event.json", body)
 
-    body = json.dumps(post_data)
+        print(body)
 
-    print(body)
+        url = f"https://{endpoint}/?alert_name=pre-commit"
 
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json",
-        "Accept": "*/*",
-        "User-Agent": "GitHub/Hook/pre-commit",
-    }
-
-    url = f"https://{endpoint}/?alert_name=pre-commit"
-
-    # conn = http.client.HTTPSConnection(endpoint, 443)
-    # print("Connected")
-    # conn.request("POST", url, body, headers)
-    # print("Posted")
-    # response = conn.getresponse()
-    # print("Responded")
-    # print(response.status, response.reason)
-    # data = response.read()
-    # conn.close()
+        # conn = http.client.HTTPSConnection(endpoint, 443)
+        # print("Connected")
+        # conn.request("POST", url, body, headers)
+        # print("Posted")
+        # response = conn.getresponse()
+        # print("Responded")
+        # print(response.status, response.reason)
+        # data = response.read()
+        # conn.close()
 
 
 if __name__ == "__main__":
-
-    ssh_password = getpass.getpass("Password:")
-    notify(ssh_password)
+    fire.Fire(Hook)

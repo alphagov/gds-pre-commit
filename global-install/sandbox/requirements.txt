@@ -1,2 +1,5 @@
 cryptography
 paramiko
+pexpect
+gitpython
+fire
