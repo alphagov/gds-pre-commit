@@ -69,8 +69,8 @@ def get_ssh_key(host="github.com"):
 
 
 def load_private_key(key_file, ssh_password=None):
-    rsa_key = paramiko.RSAKey.from_private_key_file(key_file, ssh_password)
-    private_key = rsa_key.key
+    key_loader = paramiko.RSAKey.from_private_key_file(key_file, ssh_password)
+    private_key = key_loader.key
     return private_key
 
 
