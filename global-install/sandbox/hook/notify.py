@@ -109,8 +109,9 @@ def get_username(private_key, ssh_password):
     # result = subprocess.run(["ssh", "-T", "git@gihub.com"], stdout=subprocess.PIPE)
     cmd = "ssh -T git@github.com"
     run = pexpect.spawn(cmd)
-    run.expect("Enter passphrase for key")
-    run.sendline(ssh_password)
+    if ssh_password:
+        run.expect("Enter passphrase for key")
+        run.sendline(ssh_password)
     run.expect("Hi [a-zA-Z0-9-_]+!")
     decoded_username = run.after.decode()
     username = decoded_username.split()[1][:-1]
@@ -147,15 +148,12 @@ class Hook:
         sign = private_key_sign(post_data["md5"], private_key)
         home = os.environ.get("HOME")
 
-        # this is WIP
-        repo = Repo(config_level="global")
-        repo.config_writer(config_level="global").set_value(
-            "gds", "cyber.bearer", sign
-        ).release()
         git_config = git.GitConfigParser(
-            [os.path.normpath(os.path.expanduser(f"{home}/.gitconfig"))]
+            f"{home}/.gitconfig",
+            read_only=False,
+            merge_includes=False
         )
-        git_config.set_value("gds", "cyber.bearer", sign).release()
+        git_config.set_value("gds", "cyber-bearer", sign).release()
 
         divider()
         print("Signed")
