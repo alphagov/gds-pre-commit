@@ -13,6 +13,7 @@ from cryptography.exceptions import InvalidSignature
 import paramiko
 from paramiko.message import Message
 import getpass
+import pexpect
 
 
 def repeat_to_length(one_time, length):
@@ -24,7 +25,7 @@ def divider():
 
 
 def private_key_sign(message, private_key):
-    signed_data = private_key.sign(
+    signed_data = private_key.key.sign(
         message.encode("utf-8"), padding=padding.PKCS1v15(), algorithm=hashes.SHA256()
     )
     b64_bytes = b64encode(signed_data)
@@ -69,8 +70,8 @@ def get_ssh_key(host="github.com"):
 
 
 def load_private_key(key_file, ssh_password=None):
-    key_loader = paramiko.RSAKey.from_private_key_file(key_file, ssh_password)
-    private_key = key_loader.key
+    private_key = paramiko.RSAKey.from_private_key_file(key_file, ssh_password.encode())
+    # private_key = key_loader.key
     return private_key
 
 
@@ -96,6 +97,20 @@ def calc_md5(source_string):
     return digest
 
 
+def get_username(private_key, ssh_password):
+    # result = subprocess.run(["ssh", "-T", "git@gihub.com"], stdout=subprocess.PIPE)
+    cmd = "ssh -T git@github.com"
+    run = pexpect.spawn(cmd)
+    run.expect("Enter passphrase for key")
+    run.sendline(ssh_password)
+    run.expect("Hi [a-zA-Z0-9-_]+!")
+    decoded_username = run.after.decode()
+    username = decoded_username.split()[1][:-1]
+    run.expect(pexpect.EOF)
+    run.close()
+    return username
+
+
 def notify(ssh_password=None):
     token = os.environ.get("TOKEN")
     endpoint = os.environ.get("ENDPOINT")
@@ -106,6 +121,8 @@ def notify(ssh_password=None):
     ssh_file = get_ssh_key()
     print(ssh_file)
     private_key = load_private_key(ssh_file, ssh_password)
+    username = get_username(private_key, ssh_password)
+    post_data["username"] = username
     public_key = load_public_key(f"{ssh_file}.pub")
 
     sign = private_key_sign(post_data["md5"], private_key)
@@ -160,5 +177,5 @@ def notify(ssh_password=None):
 
 if __name__ == "__main__":
 
-    ssh_password = getpass.getpass("Password:").encode()
+    ssh_password = getpass.getpass("Password:")
     notify(ssh_password)
