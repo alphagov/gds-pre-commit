@@ -2,19 +2,14 @@ import os
 import subprocess
 import hashlib
 import json
-from base64 import b64encode, b64decode
+from base64 import b64encode
 
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric import utils
-from cryptography.exceptions import InvalidSignature
 import paramiko
 import getpass
 import pexpect
 import git
-from git import Repo
 import fire
 
 
@@ -33,19 +28,6 @@ def private_key_sign(message, private_key):
     b64_bytes = b64encode(signed_data)
     b64_data = b64_bytes.decode("utf-8")
     return b64_data
-
-
-def public_key_verify(signature, message, public_key):
-    try:
-        b64_bytes = signature.encode("utf-8")
-        bytes_data = b64decode(b64_bytes)
-        public_key.verify(
-            bytes_data, message.encode("utf-8"), padding.PKCS1v15(), hashes.SHA256()
-        )
-        verified = True
-    except InvalidSignature:
-        verified = False
-    return verified
 
 
 def get_ssh_key(host="github.com"):
@@ -73,14 +55,7 @@ def get_ssh_key(host="github.com"):
 
 def load_private_key(key_file, ssh_password=None):
     private_key = paramiko.RSAKey.from_private_key_file(key_file, ssh_password.encode())
-    # private_key = key_loader.key
     return private_key
-
-
-def load_public_key(key_file):
-    content = read_file(key_file, "rb")
-    public_key = serialization.load_ssh_public_key(content, backend=default_backend())
-    return public_key
 
 
 def read_file(file_path, flags="r"):
