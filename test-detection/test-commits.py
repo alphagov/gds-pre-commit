@@ -1,4 +1,4 @@
-import re
+import os
 import boto3
 import git
 
@@ -61,4 +61,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if "AWS_ACCESS_KEY_ID" in os.environ:
+        main()
+    else:
+        print("No AWS credentials present. Run with AWS credentials.")
