@@ -112,13 +112,13 @@ class DetectChecker:
         """ Try committing and reset on success """
         relative_path = f"test-detection/{example_file}"
         index = self.repo.index
+        detected = False
         try:
             index.add([relative_path])  # add a new file to the index
             commit_message = f"Test committing {example_file}"
             index.commit(commit_message)
             self.repo.active_branch.commit = self.repo.commit('HEAD~1')
             index.remove([relative_path])
-            detected = False
             self.log.error(f"Fail: Secret not detected for {example_file}")
         except git.exc.HookExecutionError as err:
             self.log.error(f"Passs: Secret detected for {example_file}: "+str(err))
@@ -127,7 +127,6 @@ class DetectChecker:
         except (git.GitCommandError, FileNotFoundError) as err:
             self.log.error(f"Fail: Other error {example_file}: " + str(err))
             index.remove([relative_path])
-            detected = False
         return detected
 
     def check(self):
