@@ -110,9 +110,9 @@ class DetectChecker:
 
     def _test_commit(self, example_file):
         """ Try committing and reset on success """
+        relative_path = f"test-detection/{example_file}"
+        index = self.repo.index
         try:
-            relative_path = f"test-detection/{example_file}"
-            index = self.repo.index
             index.add([relative_path])  # add a new file to the index
             commit_message = f"Test committing {example_file}"
             index.commit(commit_message)
