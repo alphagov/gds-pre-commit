@@ -195,7 +195,7 @@ class DetectChecker:
             stats["total"] = stats["detected"] + stats["failed"]
             success_rate = 100 * stats["detected"] / stats["total"]
 
-            stats["success_rate"] = 100 * stats["detected"] / stats["total"]
+            stats["success_rate"] = 100 * stats["passed"] / stats["total"]
 
             print(json.dumps(stats, indent=4))
 
