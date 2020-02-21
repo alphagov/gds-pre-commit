@@ -47,6 +47,7 @@ class DetectChecker:
         self.log = logging.getLogger('detect-check')
         self.log.setLevel(logging.DEBUG)
         self.templates = {}
+        self.tests = []
         for template in glob.glob("templates/*"):
             file_name_components = template.split("/")
             file_name = file_name_components.pop()
@@ -59,11 +60,13 @@ class DetectChecker:
         extension = template_components.pop()
         file_name = ".".join(template_components)
 
-        temp_file_words = f"commit_{source}_{secret_type}_{file_name}".split(r"[-_\s\.]")
+        temp_file_words = re.split("[-_\s\.]", f"commit_{source}_{secret_type}")
         if extension == "java":
             temp_file_name = " ".join(temp_file_words).title().replace(" ", "")
+            temp_file_name += file_name
         else:
             temp_file_name = "_".join(temp_file_words).lower()
+            temp_file_name += f"_{file_name}"
 
         commit_file = f"commits/{temp_file_name}.{extension}"
         return commit_file
@@ -73,6 +76,7 @@ class DetectChecker:
         # Generate temp filename from secret type
         for template, content in self.templates.items():
             commit_file = self.generate_temp_file_name(source, secret_type, template)
+            extension = commit_file.split(".").pop()
 
             with open(commit_file, "w") as code_file:
                 multi_line = value.replace('"', '\\"')
@@ -80,12 +84,19 @@ class DetectChecker:
                 code_content = content.replace("%SINGLE_LINE_VARIABLE%", single_line)
                 code_content = code_content.replace("%MULTI_LINE_VARIABLE%", multi_line)
                 code_file.write(code_content)
+                self.tests.append({
+                    "source": source,
+                    "secret_type": secret_type,
+                    "test_file": commit_file,
+                    "file_type": extension
+                })
 
     @classmethod
     def cleanup(cls):
         """ Clean up previous run """
-        for example in glob.glob("commits/*.py"):
-            os.remove(example)
+        for example in glob.glob("commits/*"):
+            if "README.md" not in example:
+                os.remove(example)
 
     def _build_commitable_temp_files(self):
         """ Iterate over secret types and populate into temp files from self.templates """
@@ -121,7 +132,6 @@ class DetectChecker:
         self.parent_branch.checkout()
         self.repo.delete_head(self.branch_name)
 
-
     def _test_commit(self, example_file):
         """ Try committing and reset on success """
         relative_path = f"test-detection/{example_file}"
@@ -151,20 +161,37 @@ class DetectChecker:
             self.branch()
             self._build_commitable_temp_files()
             status = defaultdict(list)
-            for example in sorted(glob.glob("commits/*.py")):
-                detected = self._test_commit(example)
-                category = "detected" if detected else "failed"
-                status[category].append(example)
+            for test in self.tests:
+                example = test["test_file"]
+                if "README.md" not in example:
+                    detected = self._test_commit(example)
+                    outcome = "passed" if detected else "failed"
+                    status[outcome].append(example)
+                    test["detected"] = detected
+                    test["outcome"] = outcome
 
             self._delete_test_branch()
             print(f"Reset to parent branch: {self.repo.active_branch.name}")
 
+            language_stats = defaultdict(int)
+            secret_stats = defaultdict(int)
+            for test in self.tests:
+                lang = test["file_type"]
+                language_stats[lang] += 1
+                secret_type = f"{test['source']}: {test['secret_type']}"
+                secret_stats[secret_type] += 1
+
+            print(json.dumps(language_stats, indent=4))
+            print(json.dumps(secret_stats, indent=4))
+
+            # Print tests by status
             print(json.dumps(status, indent=4))
             stats = {
-                "detected": 0,
+                "passed": 0,
                 "failed": 0
             }
-            stats.update({category:len(files) for category,files in status.items()})
+            stats.update({category: len(files) for category, files in status.items()})
+
             stats["total"] = stats["detected"] + stats["failed"]
             success_rate = 100 * stats["detected"] / stats["total"]
 
@@ -181,8 +208,14 @@ class DetectChecker:
         self.cleanup()
         self._load_repo()
         self._checkout_test_branch()
-        self._build_commitable_temp_files()
         print(f"Testing on branch: {self.repo.active_branch.name}")
+
+    def build_tests(self):
+        if "AWS_ACCESS_KEY_ID" in os.environ:
+            self.cleanup()
+            self._build_commitable_temp_files()
+        else:
+            print("No AWS credentials present. Run with AWS credentials.")
 
 
 if __name__ == "__main__":
