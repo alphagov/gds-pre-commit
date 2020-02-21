@@ -188,11 +188,21 @@ class DetectChecker:
                 language_stats[f"{lang}_total"] += 1
                 secret_stats[f"{secret_type}_total"] += 1
 
-            print(json.dumps(language_stats, indent=4))
-            print(json.dumps(secret_stats, indent=4))
+            # print(json.dumps(language_stats, indent=4))
+            # print(json.dumps(secret_stats, indent=4))
+            print("\n\nStats by secret type\n")
+            for secret_status in sorted(secret_stats.keys()):
+                print(f"{secret_status}: {secret_stats[secret_status]}")
+
+            print("\n\nStats by template type\n")
+            for lang_status in sorted(language_stats.keys()):
+                print(f"{lang_status}: {language_stats[lang_status]}")
+
 
             # Print tests by status
-            print(json.dumps(status, indent=4))
+
+            # print(json.dumps(status, indent=4))
+            print("\n\nOverall success rate\n")
             stats = {
                 "passed": 0,
                 "failed": 0
