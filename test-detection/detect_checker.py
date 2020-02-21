@@ -173,33 +173,34 @@ class DetectChecker:
             self._delete_test_branch()
             print(f"Reset to parent branch: {self.repo.active_branch.name}")
 
-            language_stats = defaultdict(int)
-            secret_stats = defaultdict(int)
+            language_stats = defaultdict(dict)
+            secret_stats = defaultdict(dict)
             for test in self.tests:
+
                 lang = test["file_type"]
+                language_stats[lang] = defaultdict(int)
+
                 secret_type = f"{test['source']}: {test['secret_type']}"
+                secret_stats[secret_type] = defaultdict(int)
 
                 if test["detected"]:
-                    language_stats[f"{lang}_passed"] += 1
-                    secret_stats[f"{secret_type}_passed"] += 1
+                    language_stats[lang]["passed"] += 1
+                    secret_stats[secret_type]["passed"] += 1
                 else:
-                    language_stats[f"{lang}_failed"] += 1
-                    secret_stats[f"{secret_type}_failed"] += 1
-                language_stats[f"{lang}_total"] += 1
-                secret_stats[f"{secret_type}_total"] += 1
+                    language_stats[lang]["failed"] += 1
+                    secret_stats[secret_type]["failed"] += 1
+                language_stats[lang]["total"] += 1
+                secret_stats[secret_type]["total"] += 1
 
             # print(json.dumps(language_stats, indent=4))
             # print(json.dumps(secret_stats, indent=4))
             print("\n\nStats by secret type\n")
-            for secret_status in sorted(secret_stats.keys()):
-                print(f"{secret_status}: {secret_stats[secret_status]}")
+            for secret_type in sorted(secret_stats.keys()):
+                print(f"{secret_type} {secret_stats[secret_type]['passed']} {secret_stats[secret_type]['failed']} {secret_stats[secret_type]['total']}")
 
             print("\n\nStats by template type\n")
-            for lang_status in sorted(language_stats.keys()):
-                print(f"{lang_status}: {language_stats[lang_status]}")
-
-
-            # Print tests by status
+            for lang in sorted(language_stats.keys()):
+                print(f"{lang} {language_stats[lang]['passed']} {language_stats[lang]['failed']} {language_stats[lang]['total']}")
 
             # print(json.dumps(status, indent=4))
             print("\n\nOverall success rate\n")
