@@ -1,1 +1,2 @@
-test-detection/commits/*.py
+test-detection/commits/*
+!test-detection/commits/README.md
