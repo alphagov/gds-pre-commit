@@ -138,16 +138,29 @@ class DetectChecker:
             self._checkout_test_branch()
             print(f"Testing on branch: {self.repo.active_branch.name}")
             self._build_commitable_temp_files()
-            stats = defaultdict(list)
+            status = defaultdict(list)
             for example in glob.glob("commits/*.py"):
                 detected = self._test_commit(example)
                 category = "detected" if detected else "failed"
-                stats[category].append(example)
+                status[category].append(example)
 
             self._delete_test_branch()
             print(f"Reset to parent branch: {self.repo.active_branch.name}")
 
+            print(json.dumps(status, indent=4))
+            stats = {
+                "detected": 0,
+                "failed": 0
+            }
+            stats.update({category:len(files) for category,files in status.items()})
+            stats["total"] = stats["detected"] + stats["failed"]
+            success_rate = 100 * stats["detected"] / stats["total"]
+
+            stats["success_rate"] = 100 * stats["detected"] / stats["total"]
+
             print(json.dumps(stats, indent=4))
+
+            print(f"OKR detection rate: {success_rate:.1f}%")
 
         else:
             print("No AWS credentials present. Run with AWS credentials.")
