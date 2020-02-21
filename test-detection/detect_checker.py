@@ -1,17 +1,17 @@
 import glob
+import json
+import logging
 import os
 import re
-import logging
-import json
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
 
 import boto3
 import fire
 import git
 
 
-def get_paged_ssm_params(path):
+def get_paged_ssm_params(path: str) -> list:
     """ Get SSM parameters into single array from 10 item pages """
     ssm_client = boto3.client("ssm")
     has_next_page = True
@@ -44,7 +44,7 @@ class DetectChecker:
 
     def __init__(self):
         """ Load template file contents """
-        self.log = logging.getLogger('detect-check')
+        self.log = logging.getLogger("detect-check")
         self.log.setLevel(logging.DEBUG)
         self.templates = {}
         self.tests = []
@@ -60,7 +60,7 @@ class DetectChecker:
         extension = template_components.pop()
         file_name = ".".join(template_components)
 
-        temp_file_words = re.split("[-_\s\.]", f"commit_{source}_{secret_type}")
+        temp_file_words = re.split("[-_. ]", f"commit_{source}_{secret_type}")
         if extension == "java":
             temp_file_name = " ".join(temp_file_words).title().replace(" ", "")
             temp_file_name += file_name
@@ -80,16 +80,20 @@ class DetectChecker:
 
             with open(commit_file, "w") as code_file:
                 multi_line = value.replace('"', '\\"')
-                single_line = value.encode("unicode_escape").decode().replace('"', '\\"')
+                single_line = (
+                    value.encode("unicode_escape").decode().replace('"', '\\"')
+                )
                 code_content = content.replace("%SINGLE_LINE_VARIABLE%", single_line)
                 code_content = code_content.replace("%MULTI_LINE_VARIABLE%", multi_line)
                 code_file.write(code_content)
-                self.tests.append({
-                    "source": source,
-                    "secret_type": secret_type,
-                    "test_file": commit_file,
-                    "file_type": extension
-                })
+                self.tests.append(
+                    {
+                        "source": source,
+                        "secret_type": secret_type,
+                        "test_file": commit_file,
+                        "file_type": extension,
+                    }
+                )
 
     @classmethod
     def cleanup(cls):
@@ -141,7 +145,7 @@ class DetectChecker:
             index.add([relative_path])  # add a new file to the index
             commit_message = f"Test committing {example_file}"
             index.commit(commit_message)
-            self.repo.active_branch.commit = self.repo.commit('HEAD~1')
+            self.repo.active_branch.commit = self.repo.commit("HEAD~1")
             index.remove([relative_path])
             self.log.error(f"Fail: Secret not detected for {example_file}")
         except git.exc.HookExecutionError as err:
@@ -194,23 +198,29 @@ class DetectChecker:
                     language_stats[lang]["failed"] += 1
                     secret_stats[secret_type]["failed"] += 1
 
-
             # print(json.dumps(language_stats, indent=4))
             # print(json.dumps(secret_stats, indent=4))
             print("\n\nStats by secret type\n")
             for secret_type in sorted(secret_stats.keys()):
-                print(f"{secret_type} {secret_stats[secret_type]['passed']} {secret_stats[secret_type]['failed']} {secret_stats[secret_type]['total']}")
+                print(
+                    f"{secret_type} "
+                    + f"{secret_stats[secret_type]['passed']} "
+                    + f"{secret_stats[secret_type]['failed']} "
+                    + f"{secret_stats[secret_type]['total']}"
+                )
 
             print("\n\nStats by template type\n")
             for lang in sorted(language_stats.keys()):
-                print(f"{lang} {language_stats[lang]['passed']} {language_stats[lang]['failed']} {language_stats[lang]['total']}")
+                print(
+                    f"{lang} "
+                    + f"{language_stats[lang]['passed']} "
+                    + f"{language_stats[lang]['failed']} "
+                    + f"{language_stats[lang]['total']}"
+                )
 
             # print(json.dumps(status, indent=4))
             print("\n\nOverall success rate\n")
-            stats = {
-                "passed": 0,
-                "failed": 0
-            }
+            stats = {"passed": 0, "failed": 0}
             stats.update({category: len(files) for category, files in status.items()})
 
             stats["total"] = stats["passed"] + stats["failed"]
