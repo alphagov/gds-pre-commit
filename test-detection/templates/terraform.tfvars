@@ -1,0 +1,1 @@
+single_line_variable                         = "%SINGLE_LINE_VARIABLE%"

@@ -1,5 +1,6 @@
 import glob
 import os
+import re
 import logging
 import json
 from datetime import datetime
@@ -7,7 +8,6 @@ from collections import defaultdict
 
 import boto3
 import fire
-
 import git
 
 
@@ -54,13 +54,25 @@ class DetectChecker:
             self.templates[file_name] = template_file.read()
             template_file.close()
 
+    def generate_temp_file_name(self, source, secret_type, template):
+        template_components = template.split(".")
+        extension = template_components.pop()
+        file_name = ".".join(template_components)
+
+        temp_file_words = f"commit_{source}_{secret_type}_{file_name}".split(r"[-_\s\.]")
+        if extension == "java":
+            temp_file_name = " ".join(temp_file_words).title().replace(" ", "")
+        else:
+            temp_file_name = "_".join(temp_file_words).lower()
+
+        commit_file = f"commits/{temp_file_name}.{extension}"
+        return commit_file
+
     def _populate_templates(self, source, secret_type, value):
         """ Make a temporary python file """
         # Generate temp filename from secret type
         for template, content in self.templates.items():
-            commit_file = f"commits/commit_{source}_{secret_type}_{template}"
-            # Make filename match python module name conventions
-            commit_file = commit_file.replace("-", "_").lower()
+            commit_file = self.generate_temp_file_name(source, secret_type, template)
 
             with open(commit_file, "w") as code_file:
                 multi_line = value.replace('"', '\\"')
@@ -166,8 +178,10 @@ class DetectChecker:
             print("No AWS credentials present. Run with AWS credentials.")
 
     def branch(self):
+        self.cleanup()
         self._load_repo()
         self._checkout_test_branch()
+        self._build_commitable_temp_files()
         print(f"Testing on branch: {self.repo.active_branch.name}")
 
 
