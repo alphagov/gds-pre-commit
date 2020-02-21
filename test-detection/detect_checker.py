@@ -121,7 +121,8 @@ class DetectChecker:
             index.remove([relative_path])
             self.log.error(f"Fail: Secret not detected for {example_file}")
         except git.exc.HookExecutionError as err:
-            self.log.error(f"Passs: Secret detected for {example_file}: "+str(err))
+            self.log.error(f"Pass: Secret detected for {example_file}: ")
+            self.log.debug(str(err))
             index.remove([relative_path])
             detected = True
         except (git.GitCommandError, FileNotFoundError) as err:
