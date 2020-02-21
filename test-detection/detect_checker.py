@@ -179,7 +179,7 @@ class DetectChecker:
                 lang = test["file_type"]
                 secret_type = f"{test['source']}: {test['secret_type']}"
 
-                if test.detected:
+                if test["detected"]:
                     language_stats[f"{lang}_passed"] += 1
                     secret_stats[f"{secret_type}_passed"] += 1
                 else:
