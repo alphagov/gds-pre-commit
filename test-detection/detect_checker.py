@@ -119,13 +119,13 @@ class DetectChecker:
             self.repo.active_branch.commit = self.repo.commit('HEAD~1')
             index.remove([relative_path])
             detected = False
-            self.log.error(f"Secret not detected for {example_file}")
-        except (git.GitCommandError, git.exc.HookExecutionError) as err:
-            self.log.info(f"Secret detected for {example_file}: "+str(err))
+            self.log.error(f"Fail: Secret not detected for {example_file}")
+        except git.exc.HookExecutionError as err:
+            self.log.error(f"Passs: Secret detected for {example_file}: "+str(err))
             index.remove([relative_path])
             detected = True
-        except FileNotFoundError as err:
-            self.log.error(f"Not found error {example_file}: " + str(err))
+        except (git.GitCommandError, FileNotFoundError) as err:
+            self.log.error(f"Fail: Other error {example_file}: " + str(err))
             index.remove([relative_path])
             detected = False
         return detected
