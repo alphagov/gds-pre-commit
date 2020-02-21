@@ -34,7 +34,7 @@ def get_paged_ssm_params(path):
 def main():
 
     ssm_params = get_paged_ssm_params("/detect-secrets/example-data")
-    template_file = open("template.py", "r")
+    template_file = open("templates/template.py", "r")
     template = template_file.read()
     template_file.close()
 
