@@ -177,9 +177,16 @@ class DetectChecker:
             secret_stats = defaultdict(int)
             for test in self.tests:
                 lang = test["file_type"]
-                language_stats[lang] += 1
                 secret_type = f"{test['source']}: {test['secret_type']}"
-                secret_stats[secret_type] += 1
+
+                if test.detected:
+                    language_stats[f"{lang}_passed"] += 1
+                    secret_stats[f"{secret_type}_passed"] += 1
+                else:
+                    language_stats[f"{lang}_failed"] += 1
+                    secret_stats[f"{secret_type}_failed"] += 1
+                language_stats[f"{lang}_total"] += 1
+                secret_stats[f"{secret_type}_total"] += 1
 
             print(json.dumps(language_stats, indent=4))
             print(json.dumps(secret_stats, indent=4))
