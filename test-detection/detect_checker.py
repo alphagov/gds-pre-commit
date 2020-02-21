@@ -63,7 +63,7 @@ class DetectChecker:
                 print(f"{source}: {secret_type}")
 
                 commit_file = f"commits/commit_{source}_{secret_type}.py"
-                commit_file = commit_file.replace("-", "_").to_lower_case()
+                commit_file = commit_file.replace("-", "_").lower`()
 
                 with open(commit_file, "w") as code_file:
                     multi_line = param["Value"].replace('"', '\\"')
