@@ -136,9 +136,7 @@ class DetectChecker:
         """ Run checks if AWS credentials present """
         self.cleanup()
         if "AWS_ACCESS_KEY_ID" in os.environ:
-            self._load_repo()
-            self._checkout_test_branch()
-            print(f"Testing on branch: {self.repo.active_branch.name}")
+            self.branch()
             self._build_commitable_temp_files()
             status = defaultdict(list)
             for example in sorted(glob.glob("commits/*.py")):
@@ -168,7 +166,9 @@ class DetectChecker:
             print("No AWS credentials present. Run with AWS credentials.")
 
     def branch(self):
+        self._load_repo()
         self._checkout_test_branch()
+        print(f"Testing on branch: {self.repo.active_branch.name}")
 
 
 if __name__ == "__main__":
