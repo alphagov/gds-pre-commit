@@ -79,11 +79,13 @@ class DetectChecker:
         """ Iterate over secret types and populate into temp files from self.templates """
         ssm_params = get_paged_ssm_params("/detect-secrets/example-data")
 
+        count = 0
         for param in ssm_params:
+            count += 1
             parents = param["Name"].split("/")
             secret_type = parents.pop()
             source = parents.pop()
-            print(f"{source}: {secret_type}")
+            print(f"Created test commit for {count}: {source} - {secret_type}")
 
             self._populate_templates(source, secret_type, param["Value"])
 
@@ -139,7 +141,7 @@ class DetectChecker:
             print(f"Testing on branch: {self.repo.active_branch.name}")
             self._build_commitable_temp_files()
             status = defaultdict(list)
-            for example in glob.glob("commits/*.py"):
+            for example in sorted(glob.glob("commits/*.py")):
                 detected = self._test_commit(example)
                 category = "detected" if detected else "failed"
                 status[category].append(example)
@@ -164,6 +166,9 @@ class DetectChecker:
 
         else:
             print("No AWS credentials present. Run with AWS credentials.")
+
+    def branch(self):
+        self._checkout_test_branch()
 
 
 if __name__ == "__main__":
