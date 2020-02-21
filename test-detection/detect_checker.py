@@ -55,7 +55,9 @@ class DetectChecker:
             self.templates[file_name] = template_file.read()
             template_file.close()
 
-    def generate_temp_file_name(self, source, secret_type, template):
+    def generate_temp_file_name(
+        self, source: str, secret_type: str, template: str
+    ) -> str:
         template_components = template.split(".")
         extension = template_components.pop()
         file_name = ".".join(template_components)
@@ -71,7 +73,7 @@ class DetectChecker:
         commit_file = f"commits/{temp_file_name}.{extension}"
         return commit_file
 
-    def _populate_templates(self, source, secret_type, value):
+    def _populate_templates(self, source: str, secret_type: str, value: str) -> None:
         """ Make a temporary python file """
         # Generate temp filename from secret type
         for template, content in self.templates.items():
@@ -136,7 +138,7 @@ class DetectChecker:
         self.parent_branch.checkout()
         self.repo.delete_head(self.branch_name)
 
-    def _test_commit(self, example_file):
+    def _test_commit(self, example_file: str) -> bool:
         """ Try committing and reset on success """
         relative_path = f"test-detection/{example_file}"
         index = self.repo.index
