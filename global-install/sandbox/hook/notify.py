@@ -98,7 +98,7 @@ def get_username(private_key, ssh_password):
 class Hook:
     @classmethod
     def install(cls):
-        ssh_password = getpass.getpass("Password:")
+        ssh_password = getpass.getpass("Enter SSH Password:")
         post_data = {}
         result = subprocess.run(
             ["git", "config", "--global", "-l"], stdout=subprocess.PIPE
