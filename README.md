@@ -2,14 +2,9 @@
 
 ```shell
 pip install pre-commit detect-secrets
-mkdir ~/gds
-git clone https://github.com/alphagov/gds-pre-commit.git ~/gds/gds-pre-commit
-git config --global core.hooksPath $HOME/gds/gds-pre-commit/global_install/hooks
-```
-
-Run an initial check to ensure everything is installed and working correctly:
-```shell
-pre-commit run --all-files -c .gds/.pre-commit-config.yaml
+mkdir -p ~/gds
+git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
+git config --global core.hooksPath $HOME/.gds-pre-commit/global_install/hooks
 ```
 
 Read on for step-by-step instruction:
@@ -35,47 +30,25 @@ or
 
 `$ pip install pre-commit`
 
-### Configuring pre-commit
-We recommend using some of the hooks that are supported out of the box, as well as installing the [detect-secrets hook](https://github.com/Yelp/detect-secrets).
-
-An example [.gds/.pre-commit-config.yaml file](.gds/.pre-commit-config.yaml) used to set up your pre-commit config can be found in this repository. The .pre-commit-config.yaml file should be added to a .gds directory in the root of your repository and committed to Github.
-
 ## detect-secrets
-The detect-secrets pre-commit hook requires some minor configuration before it is run with the framework.
+The detect-secrets pre-commit hook requires some initialisation before it is run with the framework.
 
-First you will need to install detect-secrets manually:
+First you will need to install detect-secrets system-wide:
 
 `$ pip install detect-secrets`
 
 Then run the following commands in your local repository:
 
-`$ mkdir .gds`
+`$ detect-secrets scan > .secrets.baseline`
 
-`$ detect-secrets scan > .gds/.secrets.baseline`
-
-`$ detect-secrets audit .gds/.secrets.baseline`
+`$ detect-secrets audit .secrets.baseline`
 
 This will create a baseline for your repository, initialising [plugins](https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins) used and then scan all of the files in your repository. It will ask you about potential secrets it finds and if they are to real secrets or false positives.
 
-The newly created `.gds/.secrets.baseline` file should be committed to Github.
+The newly created `.secrets.baseline` file should be committed to Github.
 
-## Initial pre-commit execution
-Once you have followed the steps above, the last steps to follow are as follows.
-
-Run the following command to install your pre-commit hooks to git (note that this command will need to be run once locally by every one who uses your repo):
-
-`$ pre-commit install -c .gds/.pre-commit-config.yaml`
-
-Run an initial check to ensure everything is installed and working correctly:
-
-`$ pre-commit run --all-files -c .gds/.pre-commit-config.yaml`
 
 Once that's completed, you're all done! If you want to add any other hooks, take a look at the [extensive list](https://pre-commit.com/hooks.html). There are various handy linters and formatters for Go, Ruby, Python and Terraform.
-
-## Maintaining your hooks
-You can update your hooks by periodically running the following command:
-
-`$ pre-commit autoupdate -c .gds/.pre-commit-config.yaml`
 
 ## Supported editors
 This pre-commit hook has been tested and is working with the following editors:
