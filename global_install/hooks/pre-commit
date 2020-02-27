@@ -18,8 +18,10 @@ ID_HASH = '138fd403232d2ddd5efb44317e38bf03'
 
 home = expanduser("~")
 # global_config = 'gds/git-template/.pre-commit-config.yaml'
+cmd = ('git', 'rev-parse', '--show-toplevel')
+top_level = subprocess.check_output(cmd).decode('UTF-8').strip()
 GLOBAL_CONFIG = os.path.join(home, 'gds/gds-pre-commit/global_install/hooks/.pre-commit-config.yaml')
-LOCAL_CONFIG = os.path.join(os.environ['PWD'], '.pre-commit-config.yaml')
+LOCAL_CONFIG = os.path.join(top_level, '.pre-commit-config.yaml')
 HOOK_TYPE = 'pre-commit'
 INSTALL_PYTHON = '/usr/local/Cellar/pre-commit/1.20.0/libexec/bin/python3.7'
 SKIP_ON_MISSING_CONFIG = False
@@ -89,9 +91,6 @@ def _find_config():
 
 
 def _validate_config(config):
-    # cmd = ('git', 'rev-parse', '--show-toplevel')
-    # top_level = subprocess.check_output(cmd).decode('UTF-8').strip()
-    # cfg = os.path.join(top_level, CONFIG)
 
     if os.path.isfile(config):
         pass
@@ -193,7 +192,8 @@ else:
 
 
 def main():
-    config_path = os.environ['PWD'] + "/.git/config"
+    config_path = os.path.join(top_level, ".git/config")
+    print(config_path)
     with open(config_path) as config:
         if "alphagov" not in config.read():
             print("This is not an alphagov repo")
