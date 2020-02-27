@@ -18,7 +18,7 @@ ID_HASH = '138fd403232d2ddd5efb44317e38bf03'
 
 home = expanduser("~")
 # global_config = 'gds/git-template/.pre-commit-config.yaml'
-GLOBAL_CONFIG = os.path.join(home, 'gds/git-template/.pre-commit-config.yaml')
+GLOBAL_CONFIG = os.path.join(home, 'gds/gds-pre-commit/global_install/hooks/.pre-commit-config.yaml')
 LOCAL_CONFIG = os.path.join(os.environ['PWD'], '.pre-commit-config.yaml')
 HOOK_TYPE = 'pre-commit'
 INSTALL_PYTHON = '/usr/local/Cellar/pre-commit/1.20.0/libexec/bin/python3.7'
