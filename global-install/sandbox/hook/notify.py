@@ -98,50 +98,34 @@ def get_username(private_key, ssh_password):
 class Hook:
     @classmethod
     def install(cls):
-        ssh_password = getpass.getpass("Enter SSH Password:")
-        post_data = {}
-        result = subprocess.run(
-            ["git", "config", "--global", "-l"], stdout=subprocess.PIPE
-        )
-        output = result.stdout.decode("utf-8")
-        lines = output.split("\n")
-        wanted = ["user.name", "user.email"]
-        for line in lines:
-            terms = line.split("=")
-            if len(terms) > 1:
-                key = terms[0]
-                value = terms[1]
-                if key in wanted:
-                    post_data[key] = value
-
-        ssh_file = get_ssh_key()
-        print(ssh_file)
-        private_key = load_private_key(ssh_file, ssh_password)
-        username = get_username(private_key, ssh_password)
-        post_data["username"] = username
-        post_data["md5"] = calc_md5(json.dumps(post_data))
-        sign = private_key_sign(post_data["md5"], private_key)
         home = os.environ.get("HOME")
+        if "GDS_GH_USERNAME" in os.environ:
+            username = os.environ.get("GDS_GH_USERNAME")
 
-        git_config = git.GitConfigParser(
-            f"{home}/.gitconfig",
-            read_only=False,
-            merge_includes=False
-        )
-        git_config.set_value("gds", "cyber-bearer", sign).release()
-        git_config.set_value("gds", "cyber-raw", post_data["md5"]).release()
-        git_config.set_value("gds", "github-user", username).release()
+            signed_file_path = os.environ.get("GDS_GH_PC_SIGN")
+            verify_file_path = os.environ.get("GDS_GH_PC_RAW")
+            with open(signed_file_path, "r") as signed_file:
+                signed_data = signed_file.read().encode('utf-8').hex()
+            with open(verify_file_path, "r") as verify_file:
+                verify_data = verify_file.read().encode('utf-8').hex()
 
-        divider()
-        print("Signed")
-        print(sign)
-        divider()
+            git_config = git.GitConfigParser(
+                f"{home}/.gitconfig",
+                read_only=False,
+                merge_includes=False
+            )
+            git_config.set_value("gds", "signed-data", f"{signed_data}").release()
+            git_config.set_value("gds", "verify-data", f"{verify_data}").release()
+            git_config.set_value("gds", "github-user", username).release()
+
+            print("Your config has been installed")
+        else:
+            print("Please run source generate_signed_message.sh first to generate your config")
 
     @classmethod
     def notify(cls):
         home = os.environ.get("HOME")
         endpoint = os.environ.get("ENDPOINT")
-
 
         git_config = git.GitConfigParser(
             f"{home}/.gitconfig",
@@ -150,8 +134,8 @@ class Hook:
         )
 
         post_data = {"commit": {"number": 12524, "type": "issue", "action": "show"}}
-        sign = git_config.get_value("gds", "cyber-bearer")
-        post_data["md5"] = git_config.get_value("gds", "cyber-raw")
+        sign = git_config.get_value("gds", "signed-data")
+        post_data["verify"] = git_config.get_value("gds", "verify-data")
         post_data["username"] = git_config.get_value("gds", "github-user")
         headers = {
             "Authorization": f"Bearer {sign}",

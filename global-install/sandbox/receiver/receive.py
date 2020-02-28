@@ -50,16 +50,20 @@ def read_file(file_path, flags="r"):
 
 
 def receive():
-    event_json = read_file("../event.openssl.json")
+    event_json = read_file("../event.json")
+    print(event_json)
     event = json.loads(event_json)
     public_keys = get_github_keys(event["username"])
     verified = False
-    sign = event["headers"]["Authorization"].split()[1]
+    signed_data = bytes.fromhex(event["headers"]["Authorization"].split()[1]).decode('utf-8')
+    verify_data = bytes.fromhex(event["verify"]).decode('utf-8')
+
     for key_entry in public_keys:
         public_key = load_public_key(key_entry["key"])
-        verified = verified or public_key_verify(sign, event["md5"], public_key)
-    print("Verified?")
-    print(verified)
+        this_verified = public_key_verify(signed_data, verify_data, public_key)
+        verified = verified or this_verified
+
+    print(f"\nVerified? {verified}")
 
 
 if __name__ == "__main__":

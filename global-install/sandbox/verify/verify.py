@@ -1,6 +1,7 @@
 import os
 import json
 from base64 import b64decode
+import logging
 
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
@@ -8,6 +9,10 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.exceptions import InvalidSignature
 import requests
+import git
+
+
+LOG = logging.getLogger('verify')
 
 
 def public_key_verify(signature, message, public_key):
@@ -42,8 +47,9 @@ def load_public_key(key_data):
     public_key = serialization.load_ssh_public_key(content, backend=default_backend())
     return public_key
 
+
 if __name__ == "__main__":
-    username = os.environ.get("GDS_GH_USER")
+    username = os.environ.get("GDS_GH_USERNAME")
 
     sign_file_path = os.environ.get("GDS_GH_PC_SIGN")
     raw_file_path = os.environ.get("GDS_GH_PC_RAW")
@@ -59,3 +65,25 @@ if __name__ == "__main__":
         verified = verified or public_key_verify(signature, message, public_key)
     print("Verified?")
     print(verified)
+
+    home = os.environ.get("HOME")
+    git_config = git.GitConfigParser(
+        f"{home}/.gitconfig",
+        read_only=True,
+        merge_includes=False
+    )
+
+    signed_data = bytes.fromhex(git_config.get_value("gds", "signed-data")).decode('utf-8')
+    verify_data = bytes.fromhex(git_config.get_value("gds", "verify-data")).decode('utf-8')
+
+    print("Compare signatures:\n")
+    print(f"From tmp file: {signature.encode('utf-8').hex()}")
+    print(f"From git conf: {signed_data.encode('utf-8').hex()}")
+    print(type(signature))
+    print(type(signed_data))
+    print("Same" if signature == signed_data else "Different")
+
+    print("Compare signatures:\n")
+    print(f"From tmp file: {message.encode('utf-8').hex()}")
+    print(f"From git conf: {verify_data.encode('utf-8').hex()}")
+
