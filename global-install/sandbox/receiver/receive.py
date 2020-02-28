@@ -13,8 +13,17 @@ def public_key_verify(signature, message, public_key):
     try:
         b64_bytes = signature.encode("utf-8")
         bytes_data = b64decode(b64_bytes)
+
+        pss_padding = padding.PSS(
+            mgf=padding.MGF1(hashes.SHA256()),
+            salt_length=padding.PSS.MAX_LENGTH
+        )
+
         public_key.verify(
-            bytes_data, message.encode("utf-8"), padding.PKCS1v15(), hashes.SHA256()
+            bytes_data,
+            message.encode("utf-8"),
+            padding=pss_padding,
+            algorithm=hashes.SHA256()
         )
         verified = True
     except InvalidSignature:
@@ -41,7 +50,7 @@ def read_file(file_path, flags="r"):
 
 
 def receive():
-    event_json = read_file("../event.json")
+    event_json = read_file("../event.openssl.json")
     event = json.loads(event_json)
     public_keys = get_github_keys(event["username"])
     verified = False
