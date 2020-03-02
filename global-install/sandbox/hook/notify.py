@@ -97,7 +97,7 @@ def get_username(private_key, ssh_password):
 
 class Hook:
     @classmethod
-    def install(cls):
+    def setup(cls):
         home = os.environ.get("HOME")
         if "GDS_GH_USERNAME" in os.environ:
             username = os.environ.get("GDS_GH_USERNAME")
