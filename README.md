@@ -4,8 +4,31 @@
 git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
 ~/.gds-pre-commit/install.py
 ```
+Once you've run the above commands the pre-commit framework will be installed with the detect-secrets plugin added to it's config globally for git. The first time you run `git commit` in a repository will throw a warning to tell you that you need to create a secrets baseline, as shown below:
 
-Read on for step-by-step instruction:
+```shell
+Unable to open baseline file: REPO_ROOT/.secrets.baseline
+Please create it via
+   detect-secrets scan > $HOME/.gds-pre-commit/.secrets.baseline
+```
+
+Once you've added your secrets baseline, the first time you run `git commit`, will install the hooks that have been added to your global config.
+
+It will look something like this:
+
+```shell
+$HOME/.gds-pre-commit/global_install/hooks/.pre-commit-config.yaml
+[INFO] Installing environment for https://github.com/pre-commit/pre-commit-hooks.
+[INFO] Once installed this environment will be reused.
+[INFO] This may take a few minutes...
+[INFO] Installing environment for git@github.com:Yelp/detect-secrets.
+[INFO] Once installed this environment will be reused.
+[INFO] This may take a few minutes...
+Detect Private Key.......................................................Passed
+Detect secrets...........................................................Passed
+```
+
+
 
 # gds-pre-commit
 This repository is here to assist GDS users in setting up pre-commit hooks that can improve the quality and security of projects hosted on GitHub.
@@ -18,7 +41,10 @@ The detect-secrets tool was tested against AWS keys, a private SSH key and a ran
 ## pre-commit framework
 One of the easiest ways to get started with pre-commit hooks is by using the [pre-commit framework](https://pre-commit.com/).
 
-### Installing pre-commit
+Read on for step-by-step instruction:
+
+### Installing pre-commit manually
+#### Please note that the quick install section at the top will run these commands globally
 
 To get started you can either run:
 
@@ -26,14 +52,14 @@ To get started you can either run:
 
 or
 
-`$ pip install pre-commit`
+`$ pip3 install pre-commit`
 
 ## detect-secrets
 The detect-secrets pre-commit hook requires some initialisation before it is run with the framework.
 
 First you will need to install detect-secrets system-wide:
 
-`$ pip install detect-secrets`
+`$ pip3 install detect-secrets`
 
 Then run the following commands in your local repository:
 
