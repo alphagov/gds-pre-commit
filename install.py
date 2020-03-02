@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import os
 import subprocess
 import sys
@@ -12,7 +12,7 @@ if sys.version_info < (3, 7):  # https://bugs.python.org/issue25942
 else:
     _subprocess_call = subprocess.call
 
-_subprocess_call(["pip", "install", "pre-commit", "detect-secrets"])
+_subprocess_call(["pip3", "install", "pre-commit", "detect-secrets"])
 _subprocess_call(
     [
         "git",
