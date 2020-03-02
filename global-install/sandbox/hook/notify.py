@@ -137,6 +137,7 @@ class Hook:
         sign = git_config.get_value("gds", "signed-data")
         post_data["verify"] = git_config.get_value("gds", "verify-data")
         post_data["username"] = git_config.get_value("gds", "github-user")
+        post_data["auth_type"] = "github_signed"
         headers = {
             "Authorization": f"Bearer {sign}",
             "Content-Type": "application/json",
