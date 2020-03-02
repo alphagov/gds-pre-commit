@@ -193,6 +193,12 @@ else:
 
 def main():
     config_path = os.path.join(top_level, ".git/config")
+    baseline_path = os.path.join(top_level, ".secrets.baseline")
+    if not os.path.isfile(baseline_path):
+        print("Unable to open baseline file: `REPO_ROOT`/.secrets.baseline")
+        print("Please create it via")
+        print("   `detect-secrets scan > " + baseline_path + "`")
+        sys.exit(1)
     print(config_path)
     with open(config_path) as config:
         if "alphagov" not in config.read():
