@@ -1,4 +1,4 @@
-##Install TL;DR
+## Quick Install
 
 ```shell
 git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
