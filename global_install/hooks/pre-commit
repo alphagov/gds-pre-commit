@@ -199,7 +199,7 @@ def main():
         print("Please create it via")
         print("   `detect-secrets scan > " + baseline_path + "`")
         sys.exit(1)
-    print(config_path)
+
     with open(config_path) as config:
         if "alphagov" not in config.read():
             print("This is not an alphagov repo")
