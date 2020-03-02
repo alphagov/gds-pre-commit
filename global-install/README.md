@@ -1,5 +1,34 @@
 # Global install 
 
+## Example Flow 
+
+1. Sign some data - 
+    Separate this function into a self contained bash script using standard 
+    openssl commands rather than custom python. This is to reassure the user 
+    that we're not doing anything bad with their private key. 
+    ```buildoutcfg
+    cd global-install/sandbox
+    source sign/generate_signed_message.sh -u <username> -k <path/to/private/key>
+    ```
+2. Run the setup script -  
+    Rather than relying on tmp files or env vars install the signed data in the 
+    user's git global config so that it's persisted and available. 
+    ```buildoutcfg
+    python hook/notify.py setup
+    ```
+3. Generate an example event -  
+    Use the data from the git global config to generate an example event and 
+    save locally as JSON.
+    ```buildoutcfg
+    python hook/notify.py notify
+    ```
+4. Receive an example event and verify signed content - 
+    Read the local JSON event and verify the signed data. This step 
+    approximates the lambda receiving the post event.   
+    ```buildoutcfg
+    python receiver/receive.py
+    ```
+
 ## Rationale
 
 * We want to run this code against all commits in alphagov.
