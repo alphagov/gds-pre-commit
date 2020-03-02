@@ -1,10 +1,8 @@
 ##Install TL;DR
 
 ```shell
-pip install pre-commit detect-secrets
-mkdir -p ~/gds
 git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
-git config --global core.hooksPath $HOME/.gds-pre-commit/global_install/hooks
+.gds-pre-commit/install.py
 ```
 
 Read on for step-by-step instruction:
