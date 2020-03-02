@@ -2,7 +2,7 @@
 
 ```shell
 git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
-.gds-pre-commit/install.py
+~/.gds-pre-commit/install.py
 ```
 
 Read on for step-by-step instruction:
