@@ -212,7 +212,7 @@ def main():
 
     with open(config_path) as config:
         if "alphagov" not in config.read():
-            print("This is not an alphagov repo")
+            print("This is not an alphagov repo, secrets detection skipped")
             sys.exit(0)
 
     retv, stdin = _run_legacy()
