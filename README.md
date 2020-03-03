@@ -9,7 +9,7 @@ Once you've run the above commands the pre-commit framework will be installed wi
 ```shell
 Unable to open baseline file: REPO_ROOT/.secrets.baseline
 Please create it via
-   detect-secrets scan > $HOME/.gds-pre-commit/.secrets.baseline
+   detect-secrets scan > $HOME/<your-git-repo>/.secrets.baseline
 ```
 
 Once you've added your secrets baseline, the first time you run `git commit` **on your machine**, will install the hooks that have been added to your global config.
