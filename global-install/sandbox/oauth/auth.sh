@@ -59,7 +59,7 @@ token=$(echo $authorization | jq -r '.token')
 
 # Register and get reporting credentials
 echo "Submit registration request."
-response=$(curl -s -H "Authorization: github ${token}" -H "User-Agent: GitHub/Hook" -d '{"action":"register"}' https://${endpoint}?alert_name=register)
+response=$(curl -s -H "Authorization: github ${token}" -H "User-Agent: GitHub/Hook" --connect-timeout 10 -d '{"action":"register"}' https://${endpoint}?alert_name=register)
 # This is a shared secret stored in SSM against your username - not your GitHub token
 secret=$(echo $response | jq -r '.user_secret')
 username=$(echo $response | jq -r '.username')
