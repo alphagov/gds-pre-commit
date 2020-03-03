@@ -63,7 +63,7 @@ def _run_legacy():
             "bug: pre-commit's script is installed in migration mode\n"
             "run `pre-commit install -f --hook-type {}` to fix this\n\n"
             "Please report this bug at "
-            "https://github.com/pre-commit/pre-commit/issues".format(HOOK_TYPE,),
+            "https://github.com/pre-commit/pre-commit/issues".format(HOOK_TYPE)
         )
 
     if HOOK_TYPE == "pre-push":
@@ -83,10 +83,8 @@ def _run_legacy():
 
 def _find_config():
     if os.path.isfile(LOCAL_CONFIG):
-        print("using local config")
         return LOCAL_CONFIG
     else:
-        print("using global config")
         return GLOBAL_CONFIG
 
 
@@ -95,7 +93,7 @@ def _validate_config(config):
     if os.path.isfile(config):
         pass
     elif SKIP_ON_MISSING_CONFIG or os.getenv("PRE_COMMIT_ALLOW_NO_CONFIG"):
-        print("`{}` config file not found. " "Skipping `pre-commit`.".format(config),)
+        print("`{}` config file not found. " "Skipping `pre-commit`.".format(config))
         raise EarlyExit()
     else:
         raise FatalError(
@@ -105,7 +103,7 @@ def _validate_config(config):
             "- To permanently silence this, install pre-commit with the "
             "--allow-missing-config option\n"
             "- To uninstall pre-commit run "
-            "`pre-commit uninstall`".format(config),
+            "`pre-commit uninstall`".format(config)
         )
 
 
@@ -126,7 +124,7 @@ def _exe():
         return ("pre-commit", "run")
 
     raise FatalError(
-        "`pre-commit` not found.  Did you forget to activate your virtualenv?",
+        "`pre-commit` not found.  Did you forget to activate your virtualenv?"
     )
 
 
