@@ -6,15 +6,17 @@ function usage () {
 
 Usage:
 
-  source auth.sh \\
+  auth.sh \\
     -u github_username \\
     -c 2fa-code
+    -m test
 
 OR:
 
-  source auth.sh \\
+  auth.sh \\
     --username github_username \\
     --code 2fa-code
+    --mode test
 
 EOF
 }
@@ -27,17 +29,25 @@ while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
   -c | --code )
     shift; otp=$1
     ;;
+  -m | --mode)
+    shift; mode=$1
+    ;;
   -h | --help )
     usage
-    return
+    exit 0
     ;;
 esac; shift; done
 if [[ "$1" == '--' ]]; then shift; fi
 
+# Set default behaviour
+if [[ -z "${mode}" ]]; then
+  mode="prod"
+fi
+
 tmpfile="/tmp/gh_auth.json"
 if [ ! -f "/tmp/gh_auth.json" ]; then
   timestamp=$(date)
-  post='{"scopes":["read:user", "read:org"],"note":"gh_auth '${timestamp}'"}'
+  post='{"scopes":["read:user", "read:org"],"note":"GDS GitHub Usage Reporting '${timestamp}'"}'
   curl -H "X-GitHub-OTP: ${otp}" -u ${username} -d "${post}" https://api.github.com/authorizations > $tmpfile
 fi
 token=$(cat $tmpfile | jq -r '.token')
