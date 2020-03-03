@@ -7,7 +7,6 @@ from base64 import b64encode
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 import paramiko
-import getpass
 import pexpect
 import git
 import fire
@@ -136,13 +135,14 @@ class Hook:
         post_data = {"commit": {"number": 12524, "type": "issue", "action": "show"}}
         sign = git_config.get_value("gds", "signed-data")
         post_data["verify"] = git_config.get_value("gds", "verify-data")
-        post_data["username"] = git_config.get_value("gds", "github-user")
+        username = git_config.get_value("gds", "github-user")
+        post_data["username"] = username
         post_data["auth_type"] = "ssh_signed"
         headers = {
-            "Authorization": f"Signed {sign}",
+            "Authorization": f"github {sign}",
             "Content-Type": "application/json",
             "Accept": "*/*",
-            "User-Agent": "GitHub/Hook/pre-commit",
+            "User-Agent": f"GitHub/Hook/pre-commit {username}",
         }
 
         post_data["headers"] = headers
@@ -153,7 +153,7 @@ class Hook:
 
         print(body)
 
-        url = f"https://{endpoint}/?alert_name=pre-commit"
+        url = f"https://{endpoint}/?alert_name=register"
 
         # conn = http.client.HTTPSConnection(endpoint, 443)
         # print("Connected")
