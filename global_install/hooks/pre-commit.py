@@ -89,7 +89,6 @@ def _find_config():
 
 
 def _validate_config(config):
-    print(config)
     if os.path.isfile(config):
         pass
     elif SKIP_ON_MISSING_CONFIG or os.getenv("PRE_COMMIT_ALLOW_NO_CONFIG"):
@@ -123,9 +122,7 @@ def _exe():
     if distutils.spawn.find_executable("pre-commit"):
         return ("pre-commit", "run")
 
-    raise FatalError(
-        "`pre-commit` not found.  Did you forget to activate your virtualenv?"
-    )
+    raise FatalError("`pre-commit` not found. Did you `pip install pre-commit`?")
 
 
 def _rev_exists(rev):
