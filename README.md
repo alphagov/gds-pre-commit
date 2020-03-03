@@ -17,7 +17,6 @@ Once you've added your secrets baseline, the first time you run `git commit` **o
 It will look something like this:
 
 ```shell
-$HOME/.gds-pre-commit/global_install/hooks/.pre-commit-config.yaml
 [INFO] Installing environment for https://github.com/pre-commit/pre-commit-hooks.
 [INFO] Once installed this environment will be reused.
 [INFO] This may take a few minutes...
