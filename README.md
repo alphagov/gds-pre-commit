@@ -9,7 +9,7 @@ Once you've run the above commands the pre-commit framework will be installed wi
 ```shell
 Unable to open baseline file: REPO_ROOT/.secrets.baseline
 Please create it via
-   detect-secrets scan > $HOME/.gds-pre-commit/.secrets.baseline
+   detect-secrets scan > $HOME/<your-git-repo>/.secrets.baseline
 ```
 
 Once you've added your secrets baseline, the first time you run `git commit` **on your machine**, will install the hooks that have been added to your global config.
@@ -17,7 +17,6 @@ Once you've added your secrets baseline, the first time you run `git commit` **o
 It will look something like this:
 
 ```shell
-$HOME/.gds-pre-commit/global_install/hooks/.pre-commit-config.yaml
 [INFO] Installing environment for https://github.com/pre-commit/pre-commit-hooks.
 [INFO] Once installed this environment will be reused.
 [INFO] This may take a few minutes...
