@@ -201,16 +201,16 @@ else:
 def main():
     config_path = os.path.join(top_level, ".git/config")
     baseline_path = os.path.join(top_level, ".secrets.baseline")
+    with open(config_path) as config:
+        if "alphagov" not in config.read():
+            print("This is not an alphagov repo, secrets detection skipped")
+            sys.exit(0)
+
     if not os.path.isfile(baseline_path):
         print("Unable to open baseline file: `REPO_ROOT`/.secrets.baseline")
         print("Please create it via")
         print("   `detect-secrets scan > " + baseline_path + "`")
         sys.exit(1)
-
-    with open(config_path) as config:
-        if "alphagov" not in config.read():
-            print("This is not an alphagov repo, secrets detection skipped")
-            sys.exit(0)
 
     retv, stdin = _run_legacy()
     try:
