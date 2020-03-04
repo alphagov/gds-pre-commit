@@ -41,12 +41,12 @@ fi
 # OAuth for registration credentials
 token=$(git config --global gds.github-registration-token)
 if [[ -z "${token}" ]]; then
-  echo "Perform GitHub OAuth - you will be prompted for your GitHub password."
+  echo "Performing GitHub OAuth"
   echo "This creates a personal access token with read:user and read:org scopes. "
   # Prompt user for 2FA
   echo "Please enter your GitHub 2FA code:"
   read otp
-
+  echo "Requesting authorization from GitHub - You will be prompted for your GitHub password."
   timestamp=$(date)
   post='{"scopes":["read:user", "read:org"],"note":"GDS GitHub Usage Reporting '${timestamp}'"}'
   authorization=$(curl -s -H "X-GitHub-OTP: ${otp}" -u ${username} -d "${post}" https://api.github.com/authorizations)
