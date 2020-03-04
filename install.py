@@ -17,9 +17,9 @@ else:
 
 
 if distutils.spawn.find_executable("pip3"):
-    _subprocess_call(["pip3", "install", "pre-commit", "detect-secrets"])
+    _subprocess_call(["pip3", "install", "-q", "pre-commit", "detect-secrets"])
 elif distutils.spawn.find_executable("pip"):
-    _subprocess_call(["pip", "install", "pre-commit", "detect-secrets"])
+    _subprocess_call(["pip", "install", "-q", "pre-commit", "detect-secrets"])
 else:
     print("Can't find `pip` or `pip3` on your PATH, please install pip.")
 
