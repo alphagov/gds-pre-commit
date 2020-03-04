@@ -33,3 +33,13 @@ _subprocess_call(["git", "config", "--global", "core.hooksPath", hookpath()])
 
 print()
 print("✔️ Detect-secrets hook installed")
+
+_subprocess_call(
+    [
+        "bash",
+        os.environ["HOME"] + "/.gds-pre-commit/register.sh",
+        "-t" # Remove me for production version
+    ]
+)
+print()
+print("✔️ User registered")
