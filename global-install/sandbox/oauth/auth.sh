@@ -6,11 +6,7 @@ function usage () {
 
 Usage:
 
-  auth.sh [-t]
-
-OR:
-
-  auth.sh [--test]
+  auth.sh [-t | --test]
 
 EOF
 }
@@ -48,7 +44,7 @@ if [[ -z "${token}" ]]; then
   echo "Perform GitHub OAuth - you will be prompted for your GitHub password."
   echo "This creates a personal access token with read:user and read:org scopes. "
   # Prompt user for 2FA
-  echo "Please enter your 2FA code:"
+  echo "Please enter your GitHub 2FA code:"
   read otp
 
   timestamp=$(date)
@@ -60,15 +56,21 @@ fi
 # Register and get reporting credentials
 echo "Submit registration request."
 response=$(curl -s -H "Authorization: github ${token}" -H "User-Agent: GitHub/Hook" -d '{"action":"register"}' https://${endpoint}?alert_name=register)
-# This is a shared secret stored in SSM against your username - not your GitHub token
-secret=$(echo $response | jq -r '.user_secret')
-username=$(echo $response | jq -r '.username')
 
-# Set credentials in git global config
-git config --global gds.github-reporting-token "${secret}"
-git config --global gds.github-username "${username}"
-config_user=$(git config --global gds.github-username)
-config_token=$(git config --global gds.github-reporting-token)
-if [[ -n config_token ]]; then
-  echo "You have been registered successfully."
+# Check the response is JSON
+response_type=$(echo $response | jq -r type)
+if [[ $response_type == "object" ]]; then
+  secret=$(echo $response | jq -r '.user_secret')
+  username=$(echo $response | jq -r '.username')
+
+  # Set credentials in git global config
+  git config --global gds.github-reporting-token "${secret}"
+  git config --global gds.github-username "${username}"
+  config_user=$(git config --global gds.github-username)
+  config_token=$(git config --global gds.github-reporting-token)
+  if [[ -n config_token ]]; then
+    echo "You have been registered successfully."
+  fi
+else
+  echo "Registration failed please report to #cyber-security-help."
 fi
