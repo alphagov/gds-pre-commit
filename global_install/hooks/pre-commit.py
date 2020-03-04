@@ -16,13 +16,13 @@ Z40 = "0" * 40
 ID_HASH = "138fd403232d2ddd5efb44317e38bf03"
 # start templated
 
-home = expanduser("~")
 # global_config = 'gds/git-template/.pre-commit-config.yaml'
 cmd = ("git", "rev-parse", "--show-toplevel")
 top_level = subprocess.check_output(cmd).decode("UTF-8").strip()
-GLOBAL_CONFIG = os.path.join(
-    home, ".gds-pre-commit/global_install/hooks/.pre-commit-config.yaml"
-)
+
+hook_location_cmd = ("git", "config", "core.hooksPath")
+GLOBAL_CONFIG = subprocess.check_output(hook_location_cmd).decode("UTF-8").strip()
+
 LOCAL_CONFIG = os.path.join(top_level, ".pre-commit-config.yaml")
 HOOK_TYPE = "pre-commit"
 INSTALL_PYTHON = "/usr/local/Cellar/pre-commit/1.20.0/libexec/bin/python3.7"
