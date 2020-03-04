@@ -1,5 +1,7 @@
 ## Quick Install
 
+If you are happy with the default location, just run the following two commands to install:
+
 ```shell
 git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
 ~/.gds-pre-commit/install.py
