@@ -4,20 +4,13 @@
 function usage () {
   cat << EOF
 
-You need to be on the GDS VPN or office network
 Usage:
 
-  auth.sh \\
-    -u github_username \\
-    -c github 2fa-code \\
-    [-t]
+  auth.sh [-t]
 
 OR:
 
-  auth.sh \\
-    --username github_username \\
-    --code github 2fa-code \\
-    [--test]
+  auth.sh [--test]
 
 EOF
 }
@@ -26,12 +19,6 @@ EOF
 mode="prod"
 # Parse arguments
 while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
-  -u | --username )
-    shift; username=$1
-    ;;
-  -c | --code )
-    shift; otp=$1
-    ;;
   -t | --test)
     mode="test"
     ;;
@@ -49,17 +36,30 @@ else
   endpoint="alert-controller.staging.gds-cyber-security.digital"
 fi
 
+username=$(git config --global gds.github-username)
+if [[ -z "${username}" ]]; then
+  # Prompt user for github username
+  echo "Enter your github username:"
+  read username
+fi
 # OAuth for registration credentials
-echo "Perform GitHub OAuth - you will be prompted for your GitHub password."
-echo "This creates a personal access token with read:user and read:org scopes. "
-timestamp=$(date)
-post='{"scopes":["read:user", "read:org"],"note":"GDS GitHub Usage Reporting '${timestamp}'"}'
-authorization=$(curl -s -H "X-GitHub-OTP: ${otp}" -u ${username} -d "${post}" https://api.github.com/authorizations)
-token=$(echo $authorization | jq -r '.token')
+token=$(git config --global gds.github-registration-token)
+if [[ -z "${token}" ]]; then
+  echo "Perform GitHub OAuth - you will be prompted for your GitHub password."
+  echo "This creates a personal access token with read:user and read:org scopes. "
+  # Prompt user for 2FA
+  echo "Please enter your 2FA code:"
+  read otp
 
+  timestamp=$(date)
+  post='{"scopes":["read:user", "read:org"],"note":"GDS GitHub Usage Reporting '${timestamp}'"}'
+  authorization=$(curl -s -H "X-GitHub-OTP: ${otp}" -u ${username} -d "${post}" https://api.github.com/authorizations)
+  token=$(echo $authorization | jq -r '.token')
+  git config --global gds.github-registration-token "${token}"
+fi
 # Register and get reporting credentials
 echo "Submit registration request."
-response=$(curl -s -H "Authorization: github ${token}" -H "User-Agent: GitHub/Hook" --connect-timeout 10 -d '{"action":"register"}' https://${endpoint}?alert_name=register)
+response=$(curl -s -H "Authorization: github ${token}" -H "User-Agent: GitHub/Hook" -d '{"action":"register"}' https://${endpoint}?alert_name=register)
 # This is a shared secret stored in SSM against your username - not your GitHub token
 secret=$(echo $response | jq -r '.user_secret')
 username=$(echo $response | jq -r '.username')
@@ -69,6 +69,6 @@ git config --global gds.github-reporting-token "${secret}"
 git config --global gds.github-username "${username}"
 config_user=$(git config --global gds.github-username)
 config_token=$(git config --global gds.github-reporting-token)
-if [[ -n config_user and -n config_token ]]; then
+if [[ -n config_token ]]; then
   echo "You have been registered successfully."
 fi
