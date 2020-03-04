@@ -50,7 +50,13 @@ if [[ -z "${token}" ]]; then
   timestamp=$(date)
   post='{"scopes":["read:user", "read:org"],"note":"GDS GitHub Usage Reporting '${timestamp}'"}'
   authorization=$(curl -s -H "X-GitHub-OTP: ${otp}" -u ${username} -d "${post}" https://api.github.com/authorizations)
-  token=$(echo $authorization | jq -r '.token')
+  response_type=$(echo $authorization | jq -r type)
+  if [[ $response_type == "object" ]]; then
+    token=$(echo $authorization | jq -r '.token')
+  else
+    echo "Failed to authenticate with GitHub. Please check your credentials and try again."
+    exit 1
+  fi
   git config --global gds.github-registration-token "${token}"
 fi
 # Register and get reporting credentials
@@ -72,5 +78,5 @@ if [[ $response_type == "object" ]]; then
     echo "You have been registered successfully."
   fi
 else
-  echo "Registration failed please report to #cyber-security-help."
+  echo "Registration failed. Please report to #cyber-security-help."
 fi
