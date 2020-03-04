@@ -21,7 +21,7 @@ cmd = ("git", "rev-parse", "--show-toplevel")
 top_level = subprocess.check_output(cmd).decode("UTF-8").strip()
 
 hook_location_cmd = ("git", "config", "core.hooksPath")
-GLOBAL_CONFIG = subprocess.check_output(hook_location_cmd).decode("UTF-8").strip()
+GLOBAL_CONFIG = os.path.join(subprocess.check_output(hook_location_cmd).decode("UTF-8").strip(), ".pre-commit-config.yaml")
 
 LOCAL_CONFIG = os.path.join(top_level, ".pre-commit-config.yaml")
 HOOK_TYPE = "pre-commit"
