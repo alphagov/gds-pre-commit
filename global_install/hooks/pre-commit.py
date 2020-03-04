@@ -6,7 +6,6 @@ import distutils.spawn
 import os
 import subprocess
 import sys
-from os.path import expanduser
 
 # work around https://github.com/Homebrew/homebrew-core/issues/30445
 os.environ.pop("__PYVENV_LAUNCHER__", None)

@@ -29,9 +29,7 @@ def hookpath():
     return os.path.join(p, "global_install", "hooks")
 
 
-_subprocess_call(
-    ["git", "config", "--global", "core.hooksPath", hookpath(),]
-)
+_subprocess_call(["git", "config", "--global", "core.hooksPath", hookpath()])
 
 print()
 print("✔️ Detect-secrets hook installed")
