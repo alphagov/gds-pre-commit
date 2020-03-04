@@ -186,6 +186,8 @@ Skip step 2-5 if you have already enabled MFA on Github using Yubikey.
 
 8. Use the OTP from step 7 for registration in the following command
 
-`bash oauth\auth.sh -u <your Github username> -c <Yubikey OTP from step 7>`
+`bash oauth\auth.sh`
+You will be prompted for your github username, 2fa code and github password 
+for the authorization. This returns a token with only `read:user` and `read:org`
+to enable us to query your user and organization membership. 
 
-9. Enter your Github password when prompted
