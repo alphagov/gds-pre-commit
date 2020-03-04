@@ -23,13 +23,20 @@ elif distutils.spawn.find_executable("pip"):
 else:
     print("Can't find `pip` or `pip3` on your PATH, please install pip.")
 
+def hookpath():
+    s = os.path.realpath(__file__)
+    f = os.path.basename(s)
+    p = s[:-(len(f))-1]
+    p = os.path.join(p, "global_install/hooks")
+    return p
+
 _subprocess_call(
     [
         "git",
         "config",
         "--global",
         "core.hooksPath",
-        os.environ["HOME"] + "/.gds-pre-commit/global_install/hooks",
+        hookpath(),
     ]
 )
 print()
