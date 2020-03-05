@@ -15,7 +15,6 @@ pytest = "*"
 isort = "*"
 black = "*"
 ipdb = "*"
-pdb = "*"
 
 [requires]
 python_version = "3.7"

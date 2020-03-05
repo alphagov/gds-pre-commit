@@ -4,13 +4,13 @@ from __future__ import print_function
 import json
 import sys
 
-from runner import call
+from runner import run
 
-# Get raw_input if exists and fallback on input
+
 try:
-    safe_input = raw_input
+    input = raw_input
 except NameError:
-    safe_input = input
+    pass
 
 
 def register(mode="prod"):
@@ -25,42 +25,45 @@ def register(mode="prod"):
     else:
         endpoint = "alert-controller.staging.gds-cyber-security.digital"
 
-    username = call("git config --global gds.github-username")
+    username = run("git config --global gds.github-username")
+
     if not username:
         # Prompt user for github username
-        username = safe_input("Enter your github username:")
+        username = input("Enter your github username:")
 
     # OAuth for registration credentials
-    token = call("git config --global gds.github-registration-token")
+    token = run("git config --global gds.github-registration-token")
     if not token:
         print("Performing GitHub OAuth")
         print(
             "This creates a personal access token with read:user and read:org scopes. "
         )
         # Prompt user for 2FA
-        otp = safe_input("Please enter your GitHub 2FA code:")
+        otp = input("Please enter your GitHub 2FA code:")
+
         print(
             "Requesting authorization from GitHub - "
             "You will be prompted for your GitHub password."
         )
-        timestamp = call("date")
+        timestamp = run("date")
         post_dict = {
             "scopes": ["read:user", "read:org"],
             "note": "GDS GitHub Usage Reporting " + timestamp,
         }
-        post = json.dumps(post_dict)
+        post_data = json.dumps(post_dict)
 
-        authorization_json = call(
+        authorization_json = run(
             "curl -s"
             ' -H "X-GitHub-OTP: ' + otp + '"'
             " -u " + username + " "
-            ' -d "' + post + '"'
+            ' -d \'' + post_data + '\''
             " https://api.github.com/authorizations"
         )
+
         try:
             authorization = json.loads(authorization_json)
             token = authorization["token"]
-            call("git config --global gds.github-registration-token " + token)
+            run("git config --global gds.github-registration-token " + token)
         except json.JSONDecodeError:
             print("Failed to authenticate with GitHub.")
             print("Please check your credentials and try again.")
@@ -69,7 +72,7 @@ def register(mode="prod"):
     # Register and get reporting credentials
 
     print("Submit registration request.")
-    registration_json = call(
+    registration_json = run(
         "curl -s"
         ' -H "Authorization: github ' + token + '"'
         ' -H "User-Agent: GitHub/Hook"'
@@ -82,10 +85,11 @@ def register(mode="prod"):
 
         secret = registration["user_secret"]
         username = registration["username"]
-        call("git config --global gds.github-reporting-token " + secret)
-        call("git config --global gds.github-username " + username)
-        config_user = call("git config --global gds.github-username")
-        config_token = call("git config --global gds.github-reporting-token")
+        run("git config --global gds.github-reporting-token " + secret)
+        run("git config --global gds.github-username " + username)
+        config_user = run("git config --global gds.github-username")
+        config_token = run("git config --global gds.github-reporting-token")
+
         if config_user and config_token:
             print("You have been registered successfully.")
         else:
