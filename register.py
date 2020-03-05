@@ -6,10 +6,9 @@ import sys
 
 from runner import run
 
-
 try:
-    input = raw_input
-except NameError:
+    from past.builtins import raw_input  # type: ignore
+except ImportError:
     pass
 
 
@@ -29,7 +28,7 @@ def register(mode="prod"):
 
     if not username:
         # Prompt user for github username
-        username = input("Enter your github username:")
+        username = raw_input("Enter your github username:")
 
     # OAuth for registration credentials
     token = run("git config --global gds.github-registration-token")
@@ -39,7 +38,7 @@ def register(mode="prod"):
             "This creates a personal access token with read:user and read:org scopes. "
         )
         # Prompt user for 2FA
-        otp = input("Please enter your GitHub 2FA code:")
+        otp = raw_input("Please enter your GitHub 2FA code:")
 
         print(
             "Requesting authorization from GitHub - "
@@ -56,7 +55,7 @@ def register(mode="prod"):
             "curl -s"
             ' -H "X-GitHub-OTP: ' + otp + '"'
             " -u " + username + " "
-            ' -d \'' + post_data + '\''
+            " -d '" + post_data + "'"
             " https://api.github.com/authorizations"
         )
 

@@ -4,9 +4,8 @@ from __future__ import print_function
 import distutils.spawn
 import os
 
-from runner import run
 from register import register
-
+from runner import run
 
 print("⏳ Installing pip dependencies.")
 if distutils.spawn.find_executable("pip3"):
