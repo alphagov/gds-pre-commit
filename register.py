@@ -92,3 +92,7 @@ def register(mode="prod"):
             raise Exception
     except Exception:
         print("Registration failed. Please report to #cyber-security-help.")
+
+
+if __name__ == "__main__":
+    register("test")

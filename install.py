@@ -4,7 +4,7 @@ from __future__ import print_function
 import distutils.spawn
 import os
 
-from runner import call
+from runner import _subprocess_call, call
 from register import register
 
 print("⏳ Installing pip dependencies.")
@@ -26,6 +26,12 @@ call("git config --global core.hooksPath " + hookpath())
 print()
 print("✔️ Detect-secrets hook installed")
 
-register("test")  # Remove test mode argument for production
+_subprocess_call([
+    "bash",
+    os.path.join(os.path.dirname(os.path.realpath(__file__)), "register.sh"),
+    "-t"  # Remove this for production version
+])
+# register("test")  # Remove test mode argument for production
+
 print()
 print("✔️ User registered")
