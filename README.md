@@ -2,6 +2,11 @@
 
 If you are happy with the default location, just run the following two commands to install:
 
+The script installs the hook config to your global `git config` and reports 
+your registration to us. During the registration step you'll be asked for your 
+GitHub credentials to create an OAuth token with `read:user` and `read:org` 
+scopes - this allows us to verify your identity and your GitHub org membership.
+
 ```shell
 git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
 ~/.gds-pre-commit/install.py
