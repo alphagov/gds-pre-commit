@@ -11,7 +11,12 @@ scopes - this allows us to verify your identity and your GitHub org membership.
 git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
 ~/.gds-pre-commit/install.py
 ```
-Once you've run the above commands the pre-commit framework will be installed with the detect-secrets plugin added to it's config globally for git. The first time you run `git commit` **in a repository** will throw a warning to tell you that you need to create a secrets baseline, as shown below:
+Once you've run the above commands the pre-commit framework will be installed with the detect-secrets plugin added to it's config globally for git.
+
+
+## Usage
+
+The first time you run `git commit` **in a repository** will throw a warning to tell you that you need to create a secrets baseline, as shown below:
 
 ```shell
 Unable to open baseline file: REPO_ROOT/.secrets.baseline
