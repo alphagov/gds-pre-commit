@@ -9,8 +9,12 @@ scopes - this allows us to verify your identity and your GitHub org membership.
 
 ```shell
 git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
+```
+
+```shell
 ~/.gds-pre-commit/install.py
 ```
+
 Once you've run the above commands the pre-commit framework will be installed with the detect-secrets plugin added to it's config globally for git.
 
 
