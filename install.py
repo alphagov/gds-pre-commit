@@ -24,9 +24,9 @@ def hookpath():
 run("git config --global core.hooksPath " + hookpath())
 
 print()
-print("✔️ Detect-secrets hook installed")
+print("✔️  Detect-secrets hook installed")
 
 register("test")  # Remove test mode argument for production
 
 print()
-print("✔️ User registered")
+print("✔️  User registered")
