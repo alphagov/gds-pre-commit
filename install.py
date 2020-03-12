@@ -34,8 +34,8 @@ print("✔️  Detect-secrets hook installed")
 print()
 
 print(
-    "ℹ️ The Cyber Security Team would like to register your installation, "
-    + "only your github username will be securely sent to us."
+    "ℹ️ The Cyber Security Team would like to validate and register your installation, "
+    + "a github token with read:user and read:org will be securely sent to us."
 )
 can_register = input("❓ Register with github oauth? [y/n]: ")
 
