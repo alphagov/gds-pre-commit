@@ -98,4 +98,4 @@ def register(mode="prod"):
 
 
 if __name__ == "__main__":
-    register("test")
+    register()
