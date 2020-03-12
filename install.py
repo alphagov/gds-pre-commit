@@ -8,6 +8,11 @@ import os
 from register import register
 from runner import run
 
+try:
+    input = raw_input  # type: ignore
+except NameError:
+    pass
+
 print("⏳ Installing pip dependencies.")
 if distutils.spawn.find_executable("pip3"):
     run("pip3 install -q pre-commit detect-secrets")
@@ -26,8 +31,18 @@ run("git config --global core.hooksPath " + hookpath())
 
 print()
 print("✔️  Detect-secrets hook installed")
-
-register("test")  # Remove test mode argument for production
-
 print()
-print("✔️  User registered")
+
+print(
+    "ℹ️ The Cyber Security Team would like to validate and register your installation, "
+    + "a github token with read:user and read:org will be securely sent to us."
+)
+can_register = input("❓ Register with github oauth? [y/n]: ")
+
+if can_register == "y":
+    register("test")  # Remove test mode argument for production
+
+    print()
+    print("✔️  User registered")
+else:
+    print("✔️  Done. Please let us know in #cyber-security-team that you've installed.")
