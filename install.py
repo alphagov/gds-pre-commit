@@ -42,7 +42,7 @@ print(
 can_register = input("❓ Register with github oauth? [y/n]: ")
 
 if can_register == "y":
-    register("test")  # Remove test mode argument for production
+    register()  # Add "test" argument to switch to non-production mode
 
     print()
     print("✔️  User registered")
