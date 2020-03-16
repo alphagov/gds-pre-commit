@@ -136,6 +136,7 @@ class DetectChecker:
 
     def _delete_test_branch(self):
         """ Delete local test branch """
+        self._restore_ignore_file()
         self.parent_branch.checkout()
         self.repo.delete_head(self.branch_name)
 
@@ -166,6 +167,10 @@ class DetectChecker:
         self.repo.index.remove([".gitignore"], working_tree=True)
         commit_message = f"Remove ignore file for testing"
         self.repo.index.commit(commit_message)
+
+    def _restore_ignore_file(self):
+        """ Restore .gitignore file """
+        self.repo.active_branch.commit = self.repo.commit("HEAD~1")
 
     def check(self):
         """ Run checks if AWS credentials present """
