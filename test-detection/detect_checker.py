@@ -170,7 +170,7 @@ class DetectChecker:
 
     def _restore_ignore_file(self):
         """ Restore .gitignore file """
-        self.repo.git.reset('--hard','test-detection')
+        self.repo.git.reset('--hard', self.parent_branch)
 
     def check(self):
         """ Run checks if AWS credentials present """
