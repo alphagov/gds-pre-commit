@@ -138,7 +138,7 @@ class DetectChecker:
         """ Delete local test branch """
         self._restore_ignore_file()
         self.parent_branch.checkout()
-        self.repo.delete_head(self.branch_name)
+        self.repo.delete_head(self.branch_name, force=True)
 
     def _test_commit(self, example_file: str) -> bool:
         """ Try committing and reset on success """
@@ -170,7 +170,7 @@ class DetectChecker:
 
     def _restore_ignore_file(self):
         """ Restore .gitignore file """
-        self.repo.git.reset('--hard', self.parent_branch)
+        self.repo.git.reset("--hard", "HEAD^1")
 
     def check(self):
         """ Run checks if AWS credentials present """
