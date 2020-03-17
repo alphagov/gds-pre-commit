@@ -1,3 +1,14 @@
+## Pre-requisites
+
+**hook**
+ - Python 2 or 3 with pip
+ 
+**Registration script**
+ - Python 3
+
+The pre-commit framework is installed by pip, the python package manager. To install it on your machine either brew install it or get it from your distributions package manager (it might be called `python3-pip``, or `pip3`)
+
+
 ## Quick Install
 
 If you are happy with the default location, just run the following two commands to install:
