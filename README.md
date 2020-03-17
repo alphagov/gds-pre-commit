@@ -8,7 +8,7 @@
 
 The pre-commit framework is installed by pip, the python package manager. To install it on your machine either brew install it or get it from your distributions package manager (it might be called `python3-pip`, or `pip3`)
 
-Currently, our registration script's github oauth flow only works with OTP keys (such as ubikeys), not TOTP keys. If you use such a key, please skip registration.
+Currently, our registration script's github oauth flow only works with OTP systems (such as Google authenticator or authy or yubikeys that type in a code). If you use a U2F system, please skip registration.
 
 ## Quick Install
 
