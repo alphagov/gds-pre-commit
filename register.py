@@ -63,7 +63,7 @@ def register(mode="prod"):
             authorization = json.loads(authorization_json)
             token = authorization["token"]
             run("git config --global gds.github-registration-token " + token)
-        except json.JSONDecodeError:
+        except:
             print("Failed to authenticate with GitHub.")
             print("Please check your credentials and try again.")
             sys.exit(1)
