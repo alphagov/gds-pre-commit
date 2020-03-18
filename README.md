@@ -1,18 +1,18 @@
 ## Pre-requisites
 
-**Hook**
+### Hook
  - Python 2 or 3 with pip
- 
-**Registration script**
+
+### Registration script
  - Python 3
 
-The pre-commit framework is installed by pip, the python package manager. To install it on your machine either brew install it or get it from your distributions package manager (it might be called `python3-pip`, or `pip3`)
+The pre-commit framework is installed by pip, the Python package manager. To install it on your machine either brew install it or get it from your distributions package manager (it might be called `python3-pip`, or `pip3`)
 
-Currently, our registration script's github oauth flow only works with OTP systems (such as Google authenticator or authy or yubikeys that type in a code). If you use a U2F system, please skip registration.
+Currently, our registration script's GitHub Oauth flow only works with OTP systems (such as Google Authenticator, Authy, Yubikeys that type in a code). If you use a U2F system, please skip registration.
 
 ## Quick Install
 
-If you are happy with the default location, just run the following two commands to install:
+If you are happy with the default location, run the following two commands to install:
 
 The script installs the hook config to your global `git config` and reports 
 your registration to us. During the registration step you'll be asked for your 

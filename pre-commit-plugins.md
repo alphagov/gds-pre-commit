@@ -1,6 +1,6 @@
 ## Useful hooks/plugins
 
-**Please note that these hooks are found on the pre-commit website but have not all been tested**
+Please note that these hooks are found on the pre-commit website but have not all been tested
 
 [github.com/pre-commit/pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks)
 
