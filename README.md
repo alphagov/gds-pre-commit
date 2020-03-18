@@ -2,9 +2,9 @@
 
 If you are happy with the default location, just run the following two commands to install:
 
-The script installs the hook config to your global `git config` and reports 
-your registration to us. During the registration step you'll be asked for your 
-GitHub credentials to create an OAuth token with `read:user` and `read:org` 
+The script installs the hook config to your global `git config` and reports
+your registration to us. During the registration step you'll be asked for your
+GitHub credentials to create an OAuth token with `read:user` and `read:org`
 scopes - this allows us to verify your identity and your GitHub org membership.
 
 ```shell
@@ -25,7 +25,7 @@ The first time you run `git commit` **in a repository** will throw a warning to 
 ```shell
 Unable to open baseline file: REPO_ROOT/.secrets.baseline
 Please create it via
-   detect-secrets scan > $HOME/<your-git-repo>/.secrets.baseline
+   detect-secrets scan > /<path-to-your-git-repo>/.secrets.baseline
 ```
 
 Once you've added your secrets baseline, the first time you run `git commit` **on your machine**, will install the hooks that have been added to your global config.
@@ -43,6 +43,18 @@ Detect Private Key.......................................................Passed
 Detect secrets...........................................................Passed
 ```
 
+
+## Run your first audit
+
+The detect-secrets tool may discover some secrets in your repository that you want to exclude because it's a false positive. It may also find lots of legitimate secrets that you need to confirm.
+
+The best way to __ensure your whole repository contains no secrets__ but the tool also __ignores any false positives__ in the future is to run an audit against your `.secrets.baseline` file before your run your first commit after installation.
+
+Once you have run a `scan` to create a `.secrets.baseline` file as mentioned in the *Usage section* above, run the following command:
+
+```shell
+detect-secrets audit /<path-to-your-git-repo>/.secrets.baseline
+```
 
 
 # gds-pre-commit
@@ -76,18 +88,6 @@ First you will need to install detect-secrets system-wide:
 
 `$ pip3 install detect-secrets`
 
-Then run the following commands in your local repository:
-
-`$ detect-secrets scan > .secrets.baseline`
-
-`$ detect-secrets audit .secrets.baseline`
-
-This will create a baseline for your repository, initialising [plugins](https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins) used and then scan all of the files in your repository. It will ask you about potential secrets it finds and if they are to real secrets or false positives.
-
-The newly created `.secrets.baseline` file should be committed to Github.
-
-
-Once that's completed, you're all done! If you want to add any other hooks, take a look at the [extensive list](https://pre-commit.com/hooks.html). There are various handy linters and formatters for Go, Ruby, Python and Terraform.
 
 ## Supported editors
 This pre-commit hook has been tested and is working with the following editors:
