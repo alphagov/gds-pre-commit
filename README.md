@@ -46,7 +46,7 @@ Detect secrets...........................................................Passed
 
 ## Run your first audit
 
-The detect-secrets tool may discover some secrets in your repository that you want to exclude because it's a false positive. It may also find lots of legitimate secrets that you need to confirm.
+The detect-secrets tool may discover a secret in your repository that you want to exclude because it's a false positive. It may also find lots of legitimate secrets that you need to confirm.
 
 The best way to __ensure your whole repository contains no secrets__ but the tool also __ignores any false positives__ in the future is to [run an audit](https://github.com/Yelp/detect-secrets#auditing-a-baseline) against your `.secrets.baseline` file before your run your first commit after installation.
 
@@ -58,15 +58,18 @@ detect-secrets audit /<path-to-your-git-repo>/.secrets.baseline
 
 False positives can also be [ignored using inline comments](https://github.com/Yelp/detect-secrets#inline-allowlisting), but running an audit is the preferred method.
 
+### Check in your .secrets.baseline file
+
+Once you've run your first audit of a repository, check the `.secrets.baseline` file in. This way, your colleagues/collaborators won't have to run it themselves.
+
+Likewise, if you see a `.secrets.baseline` file has been checked into GitHub, you won't need to follow the steps in the "[Usage](https://github.com/alphagov/gds-pre-commit#usage)" and "[run your first audit](https://github.com/alphagov/gds-pre-commit#run-your-first-audit)" sections. Simply make sure you have pulled the latest changes before you commit as normal.
+
 ### Caveats
 
 This tool is not a catch-all solution. Take some time to review a [list of secrets not detected by detect-secrets](https://github.com/Yelp/detect-secrets#things-that-wont-be-prevented).
 
 You can also [tune the high entropy plugin](https://github.com/Yelp/detect-secrets#plugin-configuration) to your liking when the entropy detected by the Shannon formula is too high.
 
-
-# gds-pre-commit
-This repository is here to assist GDS users in setting up pre-commit hooks that can improve the quality and security of projects hosted on GitHub.
 
 ## Secrets
 One of the main motivations for using pre-commit hooks is to prevent secrets being pushed to GitHub repositories. When we say secrets we mean things like private keys, API tokens, SSH keys, AWS keys or Slack keys. All of these 'secrets' are used to authenticate or authorise users to services we use or own and would be beneficial for an attacker to steal.
