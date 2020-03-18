@@ -1,6 +1,18 @@
+## Pre-requisites
+
+### Hook
+ - Python 2 or 3 with pip
+
+### Registration script
+ - Python 3
+
+The pre-commit framework is installed by pip, the Python package manager. To install it on your machine either brew install it or get it from your distributions package manager (it might be called `python3-pip`, or `pip3`)
+
+Currently, our registration script's GitHub Oauth flow only works with OTP systems (such as Google Authenticator, Authy, Yubikeys that type in a code). If you use a U2F system, please skip registration.
+
 ## Quick Install
 
-If you are happy with the default location, just run the following two commands to install:
+If you are happy with the default location, run the following two commands to install:
 
 The script installs the hook config to your global `git config` and reports 
 your registration to us. During the registration step you'll be asked for your 
@@ -99,76 +111,3 @@ This pre-commit hook has been tested and is working with the following editors:
 * Emacs
 * Vim (with Fugitive.vim)
 
-## Other useful hooks/plugins
-
-**Please note that these hooks are found on the pre-commit website but have not all been tested**
-
-[github.com/pre-commit/pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks)
-
-* `check-json`
-* `check-xml`
-* `check-yaml`
-* `pretty-format-json`
-* `check-merge-conflict`
-* `flake8`
-
-### Python hooks
-[github.com/pre-commit/pygrep-hooks](https://github.com/pre-commit/pygrep-hooks)
-
-* `python-check-blanket-noqa`
-* `python-no-eval`
-
-[github.com/PyCQA/bandit](https://github.com/PyCQA/bandit)
-
-* `bandit`
-
-
-### Ruby hooks
-[github.com/chriskuehl/puppet-pre-commit-hooks](https://github.com/chriskuehl/puppet-pre-commit-hooks)
-
-* `epp-validate`
-* `erb-validate`
-* `puppet-lint`
-* `ruby-validate`
-
-[github.com/mattlqx/pre-commit-ruby](https://github.com/mattlqx/pre-commit-ruby)
-
-* `rubocop`
-* `rspec`
-
-### Go hooks
-[github.com/golangci/golangci-lint](https://github.com/golangci/golangci-lint)
-
-* `golangci-lint`
-
-[github.com/dnephin/pre-commit-golang](https://github.com/dnephin/pre-commit-golang)
-
-* `go-fmt`
-* `go-unit-tests`
-
-
-### Terraform hooks
-[github.com/antonbabenko/pre-commit-terraform](https://github.com/antonbabenko/pre-commit-terraform)
-
-* `terraform_fmt`
-* `terraform_tflint`
-
-### Miscellaneous
-
-[github.com/jumanjihouse/pre-commit-hooks](https://github.com/jumanjihouse/pre-commit-hooks)
-
-* `bundler-audit`
-* `fasterer`
-* `rubocop`
-
-[github.com/Lucas-C/pre-commit-hooks-go](https://github.com/Lucas-C/pre-commit-hooks-go)
-
-* `checkmake`
-
-[github.com/Lucas-C/pre-commit-hooks-java](https://github.com/Lucas-C/pre-commit-hooks-java)
-
-* `validate-html`
-
-[github.com/IamTheFij/docker-pre-commit](https://github.com/IamTheFij/docker-pre-commit)
-
-* `docker-compose-check`
