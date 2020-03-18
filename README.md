@@ -48,13 +48,21 @@ Detect secrets...........................................................Passed
 
 The detect-secrets tool may discover some secrets in your repository that you want to exclude because it's a false positive. It may also find lots of legitimate secrets that you need to confirm.
 
-The best way to __ensure your whole repository contains no secrets__ but the tool also __ignores any false positives__ in the future is to run an audit against your `.secrets.baseline` file before your run your first commit after installation.
+The best way to __ensure your whole repository contains no secrets__ but the tool also __ignores any false positives__ in the future is to [run an audit](https://github.com/Yelp/detect-secrets#auditing-a-baseline) against your `.secrets.baseline` file before your run your first commit after installation.
 
-Once you have run a `scan` to create a `.secrets.baseline` file as mentioned in the *Usage section* above, run the following command:
+Once you have run a `scan` to create a `.secrets.baseline` file as mentioned in the [Usage section](https://github.com/alphagov/gds-pre-commit#usage) above, run the following command:
 
 ```shell
 detect-secrets audit /<path-to-your-git-repo>/.secrets.baseline
 ```
+
+False positives can also be [ignored using inline comments](https://github.com/Yelp/detect-secrets#inline-allowlisting), but running an audit is the preferred method.
+
+### Caveats
+
+This tool is not a catch-all solution. Take some time to review a [list of secrets not detected by detect-secrets](https://github.com/Yelp/detect-secrets#things-that-wont-be-prevented).
+
+You can also [tune the high entropy plugin](https://github.com/Yelp/detect-secrets#plugin-configuration) to your liking when the entropy detected by the Shannon formula is too high.
 
 
 # gds-pre-commit
