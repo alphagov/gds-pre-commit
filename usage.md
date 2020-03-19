@@ -69,11 +69,15 @@ Read on for step-by-step instruction:
 
 To get started you can either run:
 
-`$ brew install pre-commit`
+```shell
+$ brew install pre-commit
+```
 
 or
 
-`$ pip3 install pre-commit`
+```shell
+$ pip3 install pre-commit
+```
 
 ## detect-secrets
 The detect-secrets pre-commit hook requires some initialisation before it is run with the framework.
