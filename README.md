@@ -20,7 +20,7 @@ Once you've run the above commands the pre-commit framework will be installed wi
 
 ## Usage
 
-The first time you run `git commit` **in a repository** will throw a warning to tell you that you need to create a secrets baseline, as shown below:
+The first time you run `git commit` in a repository will throw a warning to tell you that you need to create a secrets baseline, as shown below:
 
 ```shell
 Unable to open baseline file: REPO_ROOT/.secrets.baseline
@@ -28,7 +28,7 @@ Please create it via
    detect-secrets scan > /<path-to-your-git-repo>/.secrets.baseline
 ```
 
-Once you've added your secrets baseline, the first time you run `git commit` **on your machine**, will install the hooks that have been added to your global config.
+Once you've added your secrets baseline, the first time you run `git commit` on your machine, will install the hooks that have been added to your global config.
 
 It will look something like this:
 
@@ -48,7 +48,10 @@ Detect secrets...........................................................Passed
 
 The detect-secrets tool may discover a secret in your repository that you want to exclude because it's a false positive. It may also find lots of legitimate secrets that you need to confirm.
 
-The best way to __ensure your whole repository contains no secrets__ but the tool also __ignores any false positives__ in the future is to [run an audit](https://github.com/Yelp/detect-secrets#auditing-a-baseline) against your `.secrets.baseline` file before your run your first commit after installation.
+If you receive an error message regarding your secrets baseline file, it will most likely be because you didn't follow the [usage](https://github.com/alphagov/gds-pre-commit#usage) and run your first audit guidelines.
+
+### Ensure your repo contains no secrets and ignores false positives
+[Run an audit](https://github.com/Yelp/detect-secrets#auditing-a-baseline) against your `.secrets.baseline` file before your run your first commit after installation.
 
 Once you have run a `scan` to create a `.secrets.baseline` file as mentioned in the [Usage section](https://github.com/alphagov/gds-pre-commit#usage) above, run the following command:
 
@@ -56,7 +59,7 @@ Once you have run a `scan` to create a `.secrets.baseline` file as mentioned in 
 detect-secrets audit /<path-to-your-git-repo>/.secrets.baseline
 ```
 
-False positives can also be [ignored using inline comments](https://github.com/Yelp/detect-secrets#inline-allowlisting), but running an audit is the preferred method.
+False positives can also be ignored using [inline comments](https://github.com/Yelp/detect-secrets#inline-allowlisting), but running an audit is the preferred method.
 
 ### Check in your .secrets.baseline file
 
