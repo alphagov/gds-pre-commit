@@ -15,12 +15,12 @@ git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
 ~/.gds-pre-commit/install.py
 ```
 
-Once you've run the above commands the pre-commit framework will be installed with the detect-secrets plugin added to it's config globally for git.
+Once you've run the above commands the pre-commit framework will be installed with the detect-secrets plugin added to its config globally for git.
 
 
 ## Usage
 
-The first time you run `git commit` in a repository will throw a warning to tell you that you need to create a secrets baseline, as shown below:
+The first time you run `git commit` in a repository it will throw a warning to tell you that you need to create a secrets baseline, as shown below:
 
 ```shell
 Unable to open baseline file: REPO_ROOT/.secrets.baseline
@@ -28,7 +28,7 @@ Please create it via
    detect-secrets scan > /<path-to-your-git-repo>/.secrets.baseline
 ```
 
-Once you've added your secrets baseline, the first time you run `git commit` on your machine, will install the hooks that have been added to your global config.
+Once you've added your secrets baseline, the first time you run `git commit` on your machine, it will install the hooks that have been added to your global config.
 
 It will look something like this:
 
@@ -48,7 +48,7 @@ Detect secrets...........................................................Passed
 
 The detect-secrets tool may discover a secret in your repository that you want to exclude because it's a false positive. It may also find lots of legitimate secrets that you need to confirm.
 
-If you receive an error message regarding your secrets baseline file, it will most likely be because you didn't follow the [usage](https://github.com/alphagov/gds-pre-commit#usage) and run your first audit guidelines.
+If you receive an error message regarding your secrets baseline file, it will most likely be because you didn't follow the [usage instructions](https://github.com/alphagov/gds-pre-commit#usage) and run your first audit guidelines.
 
 ### Ensure your repo contains no secrets and ignores false positives
 [Run an audit](https://github.com/Yelp/detect-secrets#auditing-a-baseline) against your `.secrets.baseline` file before your run your first commit after installation.
@@ -63,7 +63,7 @@ False positives can also be ignored using [inline comments](https://github.com/Y
 
 ### Check in your .secrets.baseline file
 
-Once you've run your first audit of a repository, check the `.secrets.baseline` file in. This way, your colleagues/collaborators won't have to run it themselves.
+Once you've run your first audit of a repository, check in the `.secrets.baseline` file. This way, your colleagues/collaborators won't have to run it themselves.
 
 Likewise, if you see a `.secrets.baseline` file has been checked into GitHub, you won't need to follow the steps in the "[Usage](https://github.com/alphagov/gds-pre-commit#usage)" and "[run your first audit](https://github.com/alphagov/gds-pre-commit#run-your-first-audit)" sections. Simply make sure you have pulled the latest changes before you commit as normal.
 
