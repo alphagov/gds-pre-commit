@@ -84,7 +84,9 @@ The detect-secrets pre-commit hook requires some initialisation before it is run
 
 First you will need to install detect-secrets system-wide:
 
-`$ pip3 install detect-secrets`
+```shell
+$ pip3 install detect-secrets
+```
 
 
 ## Supported editors
