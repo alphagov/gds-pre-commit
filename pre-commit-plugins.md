@@ -1,4 +1,4 @@
-## Useful hooks/plugins
+## Useful Hooks & Plugins
 
 Please note that these hooks are found on the pre-commit website but have not all been tested
 
