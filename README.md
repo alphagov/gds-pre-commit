@@ -10,6 +10,22 @@ The pre-commit framework is installed by pip, the Python package manager. To ins
 
 Currently, our registration script's GitHub Oauth flow only works with OTP systems (such as Google Authenticator, Authy, Yubikeys that type in a code). If you use a U2F system, please skip registration.
 
+#### Why are we asking people to register?
+
+Initially the goal of registration is to enable us to get an idea 
+of coverage. Registration gives us coverage of the alphagov 
+membership. We can then get coverage of (active) alphagov 
+repositories by looking for the baseline file. 
+
+Neither of those on their own give us a good idea of how many 
+commits are being made against alphagov without protection so 
+hopefully in time we can actually report by commit with another 
+hook. 
+
+The 2nd reason for registration is that it sets up your git config
+to send those per commit stats to us if we choose to go down that 
+route later.   
+
 ## Quick Install
 
 If you are happy with the default location, run the following two commands to install:
