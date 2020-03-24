@@ -1,3 +1,9 @@
+# `gds-pre-commit`
+
+`gds-pre-commit` is a tool for preventing secrets being committed to git. It is based on Yelp’s detect-secrets (https://github.com/Yelp/detect-secrets) project.
+
+If the tool detects that a git commit is being made in an alphagov repository, it scans the contents of the commit to see if contains anything that looks sensitive, like an SSH key, an AWS key or an API token. If it detects something that looks like a “secret”, it prevents the commit from going through; otherwise everything works as normal.
+
 ## Pre-requisites
 
 ### Hook
