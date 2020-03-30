@@ -30,7 +30,6 @@ jobs:
                 python3 -m venv virtualenv
                 source virtualenv/bin/activate
                 cd pre-commit-git/test-detection
-                pip install wheel
                 pip install -r requirements-pipeline.txt
                 #git config --global --unset core.hookspath
                 #pre-commit install -c .gds/.pre-commit-config.yaml
