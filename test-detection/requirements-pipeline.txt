@@ -1,3 +1,4 @@
+detect-secrets
 boto3
 gitpython
 fire

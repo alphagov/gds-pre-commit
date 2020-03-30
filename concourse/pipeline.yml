@@ -32,6 +32,5 @@ jobs:
                 cd pre-commit-git/test-detection
                 pip install wheel
                 pip install -r requirements-pipeline.txt
-                git config --global --unset core.hookspath
                 pre-commit install -c .gds/.pre-commit-config.yaml
                 git config --global core.hookspath /path/to/gds-pre-commit/global_install/hooks
