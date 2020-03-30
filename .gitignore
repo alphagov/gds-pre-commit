@@ -1,2 +1,4 @@
 test-detection/commits/*
 !test-detection/commits/README.md
+concourse/pipeline_vars.yml
+**/.mypy_cache

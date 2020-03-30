@@ -105,7 +105,8 @@ class DetectChecker:
                 os.remove(example)
 
     def _build_commitable_temp_files(self):
-        """ Iterate over secret types and populate into temp files from self.templates """
+        """ Iterate over secret types and populate into temp files from
+self.templates """
         ssm_params = get_paged_ssm_params("/detect-secrets/example-data")
 
         count = 0
@@ -163,7 +164,8 @@ class DetectChecker:
         return detected
 
     def _remove_ignore_file(self):
-        """ Remove .gitignore file so the commit files are not ignored by detect-secrets """
+        """ Remove .gitignore file so the commit files are not ignored by
+detect-secrets """
         self.repo.index.remove([".gitignore"], working_tree=True)
         commit_message = f"Remove ignore file for testing"
         self.repo.index.commit(commit_message)

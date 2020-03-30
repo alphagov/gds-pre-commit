@@ -1,0 +1,37 @@
+---
+resources:
+  - name: pre-commit-git
+    type: git
+    source:
+      branch: test-detection
+      private_key: ((deploy-keys))
+      uri: git@github.com:alphagov/gds-pre-commit.git
+
+
+jobs:
+  - name: pre_commit_tests
+    serial: false
+    plan:
+      - get: pre-commit-git
+        trigger: true
+      - task: run_pre_commit_tests
+        config:
+          inputs:
+          - name: pre-commit-git
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: {repository: gdscyber/cyber-security-concourse-base-image}
+          run:
+            path: /bin/bash
+            args:
+              - -exc
+              - |
+                python3 -m venv virtualenv
+                source virtualenv/bin/activate
+                cd pre-commit-git/test-detection
+                pip install wheel
+                pip install -r requirements.txt
+                #git config --global --unset core.hookspath
+                #pre-commit install -c .gds/.pre-commit-config.yaml
+                #git config --global core.hookspath /path/to/gds-pre-commit/global_install/hooks
