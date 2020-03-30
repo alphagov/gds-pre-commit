@@ -1,4 +1,3 @@
-wheel
 boto3
 gitpython
 fire
