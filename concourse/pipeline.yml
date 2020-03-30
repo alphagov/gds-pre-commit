@@ -34,3 +34,4 @@ jobs:
                 pip install -r requirements-pipeline.txt
                 pre-commit install -c .gds/.pre-commit-config.yaml
                 git config --global core.hookspath ../global_install/hooks
+                make run
