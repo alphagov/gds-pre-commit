@@ -1,5 +1,5 @@
+wheel
 boto3
 gitpython
 fire
-wheel
 pre-commit
