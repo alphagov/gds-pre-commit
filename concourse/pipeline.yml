@@ -7,6 +7,17 @@ resources:
       private_key: ((deploy-keys))
       uri: git@github.com:alphagov/gds-pre-commit.git
 
+blocks:
+  - config: &pre_commit_docker
+
+      platform: linux
+
+      image_resource:
+        type: docker-image
+        source: {repository: gdscyber/cyber-security-concourse-base-image}
+
+      inputs:
+        - name: pre-commit-git
 
 jobs:
   - name: pre_commit_tests
@@ -14,28 +25,42 @@ jobs:
     plan:
       - get: pre-commit-git
         trigger: true
-      - task: run_pre_commit_tests
+
+      - task: test_detection_keys
         config:
-          inputs:
-          - name: pre-commit-git
-          platform: linux
-          image_resource:
-            type: docker-image
-            source: {repository: gdscyber/cyber-security-concourse-base-image}
+          <<: *pre_commit_docker
+          outputs:
+          - name: ssh
           run:
             path: /bin/bash
             args:
               - -exc
               - |
-                python3 -m venv virtualenv
+                cat > deploy_key <<'EOF'
+                ((deploy-keys))
+                EOF
+                echo "Host github.com" > config
+                echo "  IdentityFile {workdir}/deploy_key" >> config
+                echo "  StrictHostKeyChecking no" >> config
+                chmod 400 deploy_key
+            dir: ssh
+
+      - task: run_pre_commit_tests
+        config:
+          <<: *pre_commit_docker
+          run:
+            path: /bin/bash
+            args:
+              - -exc
+              - |
+                python -m venv virtualenv
                 source virtualenv/bin/activate
                 cd pre-commit-git/test-detection
                 pip install wheel
                 pip install -r requirements-pipeline.txt
-                git config --global --unset core.hookspath
                 pre-commit install -c .gds/.pre-commit-config.yaml
                 git config --global core.hookspath ../global_install/hooks
-                source ../concourse/bin/sts-assume-role.sh /
-                'arn:aws:iam::103495720024:role/gds_pre_commit_tests_role)' /
+                source ../concourse/bin/sts-assume-role.sh \
+                'arn:aws:iam::103495720024:role/gds_pre_commit_tests_role' \
                 'eu-west-2'
-                make run
+                #make run
