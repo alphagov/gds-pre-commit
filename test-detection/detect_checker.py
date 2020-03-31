@@ -253,11 +253,8 @@ detect-secrets """
             print("No AWS credentials present. Run with AWS credentials.")
 
     def branch(self):
-        print("==== BRANCH ====")
-        #self.cleanup()
-        #print("==== CLEANUP====")
+        self.cleanup()
         self._load_repo()
-        print("==== LOAD_REPO ====")
         self._checkout_test_branch()
         print(f"Testing on branch: {self.repo.active_branch.name}")
 
