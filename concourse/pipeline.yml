@@ -9,13 +9,10 @@ resources:
 
 blocks:
   - config: &pre_commit_docker
-
       platform: linux
-
       image_resource:
         type: docker-image
         source: {repository: gdscyber/cyber-security-concourse-base-image}
-
       inputs:
         - name: pre-commit-git
 
@@ -25,35 +22,37 @@ jobs:
     plan:
       - get: pre-commit-git
         trigger: true
-
-      - task: test_detection_keys
-        config:
-          <<: *pre_commit_docker
-          outputs:
-          - name: ssh
-          run:
-            path: /bin/bash
-            args:
-              - -exc
-              - |
-                cat > deploy_key <<'EOF'
-                ((deploy-keys))
-                EOF
-                echo "Host github.com" > config
-                echo "  IdentityFile {workdir}/deploy_key" >> config
-                echo "  StrictHostKeyChecking no" >> config
-                chmod 400 deploy_key
-            dir: ssh
+#
+#      - task: test_detection_keys
+#        config:
+#          <<: *pre_commit_docker
+#          outputs:
+#          - name: ssh
+#          run:
+#            path: bash
+#            args:
+#              - -c
+#              - |
+#                workdir=$(pwd)
+#                cat > deploy_key <<'EOF'
+#                ((deploy-keys))
+#                EOF
+#                echo "Host github.com" > config
+#                echo "  IdentityFile {workdir}/deploy_key" >> config
+#                echo "  StrictHostKeyChecking no" >> config
+#                chmod 400 deploy_key
+#                cat config
+#            dir: ssh
 
       - task: run_pre_commit_tests
         config:
           <<: *pre_commit_docker
           run:
-            path: /bin/bash
+            path: bash
             args:
-              - -exc
+              - -c
               - |
-                python -m venv virtualenv
+                python3 -m venv virtualenv
                 source virtualenv/bin/activate
                 cd pre-commit-git/test-detection
                 pip install wheel
