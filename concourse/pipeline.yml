@@ -22,27 +22,19 @@ jobs:
     plan:
       - get: pre-commit-git
         trigger: true
-#
-#      - task: test_detection_keys
-#        config:
-#          <<: *pre_commit_docker
-#          outputs:
-#          - name: ssh
-#          run:
-#            path: bash
-#            args:
-#              - -c
-#              - |
-#                workdir=$(pwd)
-#                cat > deploy_key <<'EOF'
-#                ((deploy-keys))
-#                EOF
-#                echo "Host github.com" > config
-#                echo "  IdentityFile {workdir}/deploy_key" >> config
-#                echo "  StrictHostKeyChecking no" >> config
-#                chmod 400 deploy_key
-#                cat config
-#            dir: ssh
+
+      - task: test_detection_keys
+        config:
+          <<: *pre_commit_docker
+          run:
+            path: bash
+            args:
+              - -exc
+              - |
+                mkdir /root/.ssh
+                echo "Host github.com" >> /root/.ssh/config
+                echo "  StrictHostKeyChecking no" >> /root/.ssh/config
+                cat /root/.ssh/config
 
       - task: run_pre_commit_tests
         config:
@@ -62,4 +54,4 @@ jobs:
                 source ../concourse/bin/sts-assume-role.sh \
                 'arn:aws:iam::103495720024:role/gds_pre_commit_tests_role' \
                 'eu-west-2'
-                #make run
+                make run
