@@ -254,8 +254,8 @@ detect-secrets """
 
     def branch(self):
         print("==== BRANCH ====")
-        self.cleanup()
-        print("==== CLEANUP====")
+        #self.cleanup()
+        #print("==== CLEANUP====")
         self._load_repo()
         print("==== LOAD_REPO ====")
         self._checkout_test_branch()
