@@ -31,6 +31,8 @@ INSTALL_PYTHON = "/usr/local/Cellar/pre-commit/1.20.0/libexec/bin/python3.7"
 SKIP_ON_MISSING_CONFIG = False
 # end templated
 
+os.environ["DETECT_SECRETS_SECURITY_TEAM"] = "in #cyber-security-help"
+
 
 class EarlyExit(RuntimeError):
     pass
