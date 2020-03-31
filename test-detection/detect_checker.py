@@ -10,7 +10,6 @@ import boto3
 import fire
 import git
 
-
 def get_paged_ssm_params(path: str) -> list:
     """ Get SSM parameters into single array from 10 item pages """
     ssm_client = boto3.client("ssm")
@@ -121,8 +120,8 @@ self.templates """
 
     def _load_repo(self):
         self.repo = git.repo.base.Repo("..")
-        self.parent_branch = self.repo.active_branch
-        print(f"Currently on branch: {self.parent_branch.name}")
+        self.parent_branch = self.repo.head.object.hexsha
+        print(f"Currently on branch: {self.parent_branch}")
         return self.repo
 
     def _checkout_test_branch(self):
@@ -138,7 +137,7 @@ self.templates """
     def _delete_test_branch(self):
         """ Delete local test branch """
         self._restore_ignore_file()
-        self.parent_branch.checkout()
+        self.repo.head.reference = self.parent_branch
         self.repo.delete_head(self.branch_name, force=True)
 
     def _test_commit(self, example_file: str) -> bool:
@@ -192,7 +191,7 @@ detect-secrets """
                     test["outcome"] = outcome
 
             self._delete_test_branch()
-            print(f"Reset to parent branch: {self.repo.active_branch.name}")
+            print(f"Reset to parent branch: {self.repo.head.object.hexsha}")
 
             language_stats = defaultdict(dict)
             secret_stats = defaultdict(dict)
