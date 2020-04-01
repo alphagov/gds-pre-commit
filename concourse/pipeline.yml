@@ -66,7 +66,7 @@ jobs:
                 pip install -r requirements-pipeline.txt
                 pre-commit install -c .gds/.pre-commit-config.yaml
                 git config --global core.hookspath ../global_install/hooks
-                source sts-assume-role.sh \
+                source bin/sts-assume-role.sh \
                 'arn:aws:iam::103495720024:role/gds_pre_commit_tests_role' \
                 'eu-west-2'
                 make run

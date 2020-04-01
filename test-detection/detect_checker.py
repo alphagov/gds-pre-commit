@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import re
+import sys
 from collections import defaultdict
 from datetime import datetime
 
@@ -263,6 +264,7 @@ detect-secrets """
             self._build_commitable_temp_files()
         else:
             print("No AWS credentials present. Run with AWS credentials.")
+            sys.exit(1)
 
 
 if __name__ == "__main__":
