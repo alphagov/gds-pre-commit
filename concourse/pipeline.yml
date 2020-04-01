@@ -31,7 +31,7 @@ jobs:
           run:
             path: bash
             args:
-              - -exc
+              - -c
               - |
                 cat > deploy_key <<'EOF'
                 ((deploy-keys))
