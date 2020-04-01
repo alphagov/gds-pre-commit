@@ -264,7 +264,6 @@ detect-secrets """
             self._build_commitable_temp_files()
         else:
             print("No AWS credentials present. Run with AWS credentials.")
-            sys.exit(1)
 
 
 if __name__ == "__main__":
