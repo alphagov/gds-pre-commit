@@ -1,4 +1,14 @@
----
+health_status_notify: &health_status_notify
+  put: health-notification
+
+
+resource_types:
+  - name: http-api
+    type: docker-image
+    source:
+      repository: gdscyber/http-api-resource
+
+
 resources:
   - name: pre-commit-git
     type: git
@@ -6,6 +16,28 @@ resources:
       branch: test-detection
       private_key: ((deploy-keys))
       uri: git@github.com:alphagov/gds-pre-commit.git
+
+
+
+  - name: health-notification
+    type: http-api
+    source:
+      uri: https://((health_host_test))/?alert_type=concourse$&alert_name=health
+      method: POST
+      headers:
+        Authorization: "Bearer ((health_token_test))"
+      json:
+        service: "{service}"
+        state: "{health}"
+        message: "{message}"
+        pipeline: "{BUILD_PIPELINE_NAME}"
+        job: "{BUILD_JOB_NAME}"
+        build_number: "{BUILD_NAME}"
+      service: "Concourse"
+
+
+health_status_notify: &health_status_notify
+  put: health-notification
 
 blocks:
   - config: &pre_commit_docker
@@ -70,3 +102,13 @@ jobs:
                 'arn:aws:iam::103495720024:role/gds_pre_commit_tests_role' \
                 'eu-west-2'
                 make run
+        on_success:
+          <<: *health_status_notify
+          params:
+            message: "Pipeline completed successfully"
+            health: healthy
+        on_failure:
+          <<: *health_status_notify
+          params:
+            message: "Pipeline failed"
+            health: unhealthy
