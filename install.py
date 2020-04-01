@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import print_function
 
 import distutils.spawn
@@ -20,7 +20,11 @@ if distutils.spawn.find_executable("pip3"):
 elif distutils.spawn.find_executable("pip"):
     run("pip install -q pre-commit detect-secrets")
 else:
-    print("Can't find `pip` or `pip3` on your PATH, please install pip.", file=sys.stderr)
+    print(
+        "Can't find `pip` or `pip3` on your PATH,",
+        "please install pip.",
+        file=sys.stderr,
+    )
     sys.exit(1)
 
 

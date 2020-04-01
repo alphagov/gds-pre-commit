@@ -1,0 +1,5 @@
+detect-secrets
+boto3
+gitpython
+fire
+pre-commit

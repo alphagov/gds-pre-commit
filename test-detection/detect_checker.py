@@ -10,7 +10,6 @@ import boto3
 import fire
 import git
 
-
 def get_paged_ssm_params(path: str) -> list:
     """ Get SSM parameters into single array from 10 item pages """
     ssm_client = boto3.client("ssm")
@@ -105,7 +104,8 @@ class DetectChecker:
                 os.remove(example)
 
     def _build_commitable_temp_files(self):
-        """ Iterate over secret types and populate into temp files from self.templates """
+        """ Iterate over secret types and populate into temp files from
+self.templates """
         ssm_params = get_paged_ssm_params("/detect-secrets/example-data")
 
         count = 0
@@ -120,8 +120,8 @@ class DetectChecker:
 
     def _load_repo(self):
         self.repo = git.repo.base.Repo("..")
-        self.parent_branch = self.repo.active_branch
-        print(f"Currently on branch: {self.parent_branch.name}")
+        self.parent_branch = self.repo.head.object.hexsha
+        print(f"Currently on branch: {self.parent_branch}")
         return self.repo
 
     def _checkout_test_branch(self):
@@ -137,7 +137,7 @@ class DetectChecker:
     def _delete_test_branch(self):
         """ Delete local test branch """
         self._restore_ignore_file()
-        self.parent_branch.checkout()
+        self.repo.head.reference = self.parent_branch
         self.repo.delete_head(self.branch_name, force=True)
 
     def _test_commit(self, example_file: str) -> bool:
@@ -163,7 +163,8 @@ class DetectChecker:
         return detected
 
     def _remove_ignore_file(self):
-        """ Remove .gitignore file so the commit files are not ignored by detect-secrets """
+        """ Remove .gitignore file so the commit files are not ignored by
+detect-secrets """
         self.repo.index.remove([".gitignore"], working_tree=True)
         commit_message = f"Remove ignore file for testing"
         self.repo.index.commit(commit_message)
@@ -190,7 +191,7 @@ class DetectChecker:
                     test["outcome"] = outcome
 
             self._delete_test_branch()
-            print(f"Reset to parent branch: {self.repo.active_branch.name}")
+            print(f"Reset to parent branch: {self.repo.head.object.hexsha}")
 
             language_stats = defaultdict(dict)
             secret_stats = defaultdict(dict)
