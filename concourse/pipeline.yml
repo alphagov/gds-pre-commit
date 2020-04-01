@@ -3,7 +3,7 @@ resources:
   - name: pre-commit-git
     type: git
     source:
-      branch: test-detection-concourse
+      branch: test-detection
       private_key: ((deploy-keys))
       uri: git@github.com:alphagov/gds-pre-commit.git
 
