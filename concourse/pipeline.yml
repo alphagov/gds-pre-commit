@@ -26,24 +26,39 @@ jobs:
       - task: test_detection_keys
         config:
           <<: *pre_commit_docker
+          outputs:
+            - name: ssh
           run:
             path: bash
             args:
               - -exc
               - |
-                mkdir /root/.ssh
-                echo "Host github.com" >> /root/.ssh/config
-                echo "  StrictHostKeyChecking no" >> /root/.ssh/config
-                cat /root/.ssh/config
+                cat > deploy_key <<'EOF'
+                ((deploy-keys))
+                EOF
+                echo "Host github.com" > config
+                echo "  IdentityFile {workdir}/deploy_key" >> config
+                echo "  StrictHostKeyChecking no" >> config
+                chmod 400 deploy_key
+            dir: ssh
 
       - task: run_pre_commit_tests
         config:
-          <<: *pre_commit_docker
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: {repository: gdscyber/cyber-security-concourse-base-image}
+          inputs:
+            - name: pre-commit-git
+            - name: ssh
           run:
             path: bash
             args:
               - -c
               - |
+                workdir=$(pwd)
+                mkdir /root/.ssh
+                sed 's+{workdir}+'"$workdir"'/ssh+g' ssh/config > /root/.ssh/config
                 python3 -m venv virtualenv
                 source virtualenv/bin/activate
                 cd pre-commit-git/test-detection
