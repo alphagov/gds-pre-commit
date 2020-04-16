@@ -18,12 +18,12 @@ def register(mode="prod"):
 
     if mode == "prod":
         url = (
-            "https://script.google.com/macros/s/AKfycbyJJ7jtvIHhn3MPTwmvDgm2kQ3Be5KJ1sXqJY_2L_AvaISQlss/exec?name=%s&email=%s"
+            r"https://script.google.com/macros/s/AKfycbyJJ7jtvIHhn3MPTwmvDgm2kQ3Be5KJ1sXqJY_2L_AvaISQlss/exec?name=%s\&email=%s"
             % (urllib.parse.quote(username), email)
         )
     else:
         url = (
-            "https://script.google.com/macros/s/AKfycbyJJ7jtvIHhn3MPTwmvDgm2kQ3Be5KJ1sXqJY_2L_AvaISQlss/exec?name=%s&email=%s"
+            r"https://script.google.com/macros/s/AKfycbyJJ7jtvIHhn3MPTwmvDgm2kQ3Be5KJ1sXqJY_2L_AvaISQlss/exec?name=%s\&email=%s"
             % (urllib.parse.quote(username), email)
         )
 
