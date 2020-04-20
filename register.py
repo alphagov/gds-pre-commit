@@ -2,7 +2,8 @@
 from __future__ import print_function
 
 import json
-import urllib.parse
+
+import six.moves.urllib as urllib
 
 from runner import run
 
@@ -18,14 +19,16 @@ def register(mode="prod"):
 
     if mode == "prod":
         url = (
-            r"https://script.google.com/macros/s/AKfycbyJJ7jtvIHhn3MPTwmvDgm2kQ3Be5KJ1sXqJY_2L_AvaISQlss/exec?name=%s\&email=%s"
-            % (urllib.parse.quote(username), email)
-        )
+            r"https://script.google.com/macros/s/"
+            r"AKfycbyJJ7jtvIHhn3MPTwmvDgm2kQ3Be5KJ1sXqJY_2L_AvaISQlss"
+            r"/exec?name=%s\&email=%s"
+        ) % (urllib.parse.quote(username), email)
     else:
         url = (
-            r"https://script.google.com/macros/s/AKfycbyJJ7jtvIHhn3MPTwmvDgm2kQ3Be5KJ1sXqJY_2L_AvaISQlss/exec?name=%s\&email=%s"
-            % (urllib.parse.quote(username), email)
-        )
+            r"https://script.google.com/macros/s/"
+            r"AKfycbyJJ7jtvIHhn3MPTwmvDgm2kQ3Be5KJ1sXqJY_2L_AvaISQlss"
+            r"/exec?name=%s\&email=%s"
+        ) % (urllib.parse.quote(username), email)
 
     output = run("curl -Ls " + url)
 
