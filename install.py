@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import print_function
 
 import distutils.spawn
@@ -20,7 +20,9 @@ if distutils.spawn.find_executable("pip3"):
 elif distutils.spawn.find_executable("pip"):
     run("pip install -q pre-commit detect-secrets")
 else:
-    print("Can't find `pip` or `pip3` on your PATH, please install pip.", file=sys.stderr)
+    print(
+        "Can't find `pip` or `pip3` on your PATH, please install pip.", file=sys.stderr
+    )
     sys.exit(1)
 
 
@@ -35,16 +37,9 @@ print()
 print("✔️  Detect-secrets hook installed")
 print()
 
-print(
-    "ℹ️ The Cyber Security Team would like to validate and register your installation, "
-    + "a github token with read:user and read:org will be securely sent to us."
-)
-can_register = input("❓ Register with github oauth? [y/n]: ")
+print("⏳ Registering your installation with GDS Cybersecurity...")
 
-if can_register == "y":
-    register()  # Add "test" argument to switch to non-production mode
+register()  # Add "test" argument to switch to non-production mode
 
-    print()
-    print("✔️  User registered")
-else:
-    print("✔️  Done. Please let us know in #cyber-security-team that you've installed.")
+print()
+print("✔️  Installation done. Questions to #cyber-security-team. Thanks!")

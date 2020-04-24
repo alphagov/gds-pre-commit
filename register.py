@@ -2,99 +2,40 @@
 from __future__ import print_function
 
 import json
-import sys
+
+import six.moves.urllib as urllib
 
 from runner import run
-
-try:
-    input = raw_input  # type: ignore
-except NameError:
-    pass
 
 
 def register(mode="prod"):
     """
     Perform pre-commit registration
 
-    Perform an OAuth grant with GitHub and
-    send a registration message to cyber
+    send a registration message to a cybersecurty spreadsheet
     """
+    username = run("git config --global user.name")
+    email = run("git config --global user.email")
+
     if mode == "prod":
-        endpoint = "alert-controller.gds-cyber-security.digital"
+        url = (
+            r"https://script.google.com/macros/s/"
+            r"AKfycbyJJ7jtvIHhn3MPTwmvDgm2kQ3Be5KJ1sXqJY_2L_AvaISQlss"
+            r"/exec?name=%s\&email=%s"
+        ) % (urllib.parse.quote(username), email)
     else:
-        endpoint = "alert-controller.staging.gds-cyber-security.digital"
+        url = (
+            r"https://script.google.com/macros/s/"
+            r"AKfycbyJJ7jtvIHhn3MPTwmvDgm2kQ3Be5KJ1sXqJY_2L_AvaISQlss"
+            r"/exec?name=%s\&email=%s"
+        ) % (urllib.parse.quote(username), email)
 
-    username = run("git config --global gds.github-username")
+    output = run("curl -Ls " + url)
 
-    if not username:
-        # Prompt user for github username
-        username = input("Enter your github username:")
-
-    # OAuth for registration credentials
-    token = run("git config --global gds.github-registration-token")
-    if not token:
-        print("Performing GitHub OAuth")
-        print(
-            "This creates a personal access token with read:user and read:org scopes. "
-        )
-        # Prompt user for 2FA
-        otp = input("Please enter your GitHub 2FA code:")
-
-        print(
-            "Requesting authorization from GitHub - "
-            "You will be prompted for your GitHub password."
-        )
-        timestamp = run("date")
-        post_dict = {
-            "scopes": ["read:user", "read:org"],
-            "note": "GDS GitHub Usage Reporting " + timestamp,
-        }
-        post_data = json.dumps(post_dict)
-
-        authorization_json = run(
-            "curl -s"
-            ' -H "X-GitHub-OTP: ' + otp + '"'
-            " -u " + username + " "
-            " -d '" + post_data + "'"
-            " https://api.github.com/authorizations"
-        )
-
-        try:
-            authorization = json.loads(authorization_json)
-            token = authorization["token"]
-            run("git config --global gds.github-registration-token " + token)
-        except:
-            print("Failed to authenticate with GitHub.")
-            print("Please check your credentials and try again.")
-            sys.exit(1)
-
-    # Register and get reporting credentials
-
-    print("Submit registration request.")
-    registration_json = run(
-        "curl -s"
-        ' -H "Authorization: github ' + token + '"'
-        ' -H "User-Agent: GitHub/Hook"'
-        ' -d \'{"action":"register"}\''
-        " https://" + endpoint + "?alert_name=register"
-    )
-
-    try:
-        registration = json.loads(registration_json)
-
-        secret = registration["user_secret"]
-        username = registration["username"]
-        run("git config --global gds.github-reporting-token " + secret)
-        run("git config --global gds.github-username " + username)
-        config_user = run("git config --global gds.github-username")
-        config_token = run("git config --global gds.github-reporting-token")
-
-        if config_user and config_token:
-            print("You have been registered successfully.")
-        else:
-            raise Exception
-    except Exception:
-        print("Registration failed. Please report to #cyber-security-help.")
+    if json.loads(output).get("result") == "success":
+        print("You have been registered successfully.")
+    else:
+        print("Registration failed. Please report this to #cyber-security-help.")
 
 
 if __name__ == "__main__":
