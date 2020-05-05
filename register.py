@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import json
+import sys
 
 import six.moves.urllib as urllib
 
@@ -16,6 +17,10 @@ def register(mode="prod"):
     """
     username = run("git config --global user.name")
     email = run("git config --global user.email")
+
+    if not username or not email:
+        print("Git not set up correctly, please set git user.name and user.email")
+        sys.exit(1)
 
     if mode == "prod":
         url = (
