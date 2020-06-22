@@ -4,7 +4,27 @@
 
 If the tool detects that a git commit is being made in an alphagov repository, it scans the contents of the commit to see if contains anything that looks sensitive, like an SSH key, an AWS key or an API token. If it detects something that looks like a “secret”, it prevents the commit from going through; otherwise everything works as normal.
 
-## Pre-requisites
+## Quick Install
+
+First ensure you have Python 3 and pip installed.  On mac, run
+`brew install python`; on ubuntu, run `apt-get install python3-pip`.
+
+If you are happy with the default location, run the following two commands to install:
+
+The script installs the hook config to your global `git config` and reports
+your registration to us.
+
+```shell
+git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
+```
+
+```shell
+~/.gds-pre-commit/install.py
+```
+
+Once you've run the above commands the pre-commit framework will be installed with the detect-secrets plugin added to its config globally for git.
+
+## Pre-requisites in detail
 
 ### Hook
  - Python 2 or 3 with pip
@@ -25,23 +45,6 @@ Neither of those on their own give us a good idea of how many
 commits are being made against alphagov without protection so 
 hopefully in time we can actually report by commit with another 
 hook. 
-
-## Quick Install
-
-If you are happy with the default location, run the following two commands to install:
-
-The script installs the hook config to your global `git config` and reports
-your registration to us. 
-
-```shell
-git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
-```
-
-```shell
-~/.gds-pre-commit/install.py
-```
-
-Once you've run the above commands the pre-commit framework will be installed with the detect-secrets plugin added to its config globally for git.
 
 ## Further Reading
 
