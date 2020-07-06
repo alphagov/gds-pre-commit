@@ -213,7 +213,7 @@ def main():
     if not os.path.isfile(baseline_path):
         print("Unable to open baseline file: `REPO_ROOT`/.secrets.baseline")
         print("Please create it via")
-        print("   `detect-secrets scan > " + baseline_path + "`")
+        print("   detect-secrets scan > .secrets.baseline")
         sys.exit(1)
 
     retv, stdin = _run_legacy()
