@@ -205,9 +205,11 @@ else:
 def main():
     config_path = os.path.join(top_level, ".git/config")
     baseline_path = os.path.join(top_level, ".secrets.baseline")
+    gds_organisations = ["alphagov", "gds-operations", "openregister"]
+
     with open(config_path) as config:
-        if "alphagov" not in config.read():
-            print("This is not an alphagov repo, secrets detection skipped")
+        unless any(org in config.read() for org in gds_organisations):
+            print("This is not a GDS repo, secrets detection skipped")
             sys.exit(0)
 
     if not os.path.isfile(baseline_path):
