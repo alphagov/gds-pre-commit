@@ -42,4 +42,4 @@ print("⏳ Registering your installation with GDS Cybersecurity...")
 register()  # Add "test" argument to switch to non-production mode
 
 print()
-print("✔️  Installation done. Questions to #cyber-security-team. Thanks!")
+print("✔️  Installation done. Questions to #cyber-security-help. Thanks!")
