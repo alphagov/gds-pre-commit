@@ -208,7 +208,7 @@ def main():
     gds_organisations = ["alphagov", "gds-operations", "openregister"]
 
     with open(config_path) as config:
-        unless any(org in config.read() for org in gds_organisations):
+        if not any(org in config.read() for org in gds_organisations):
             print("This is not a GDS repo, secrets detection skipped")
             sys.exit(0)
 
