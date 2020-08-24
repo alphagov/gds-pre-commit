@@ -47,6 +47,10 @@ Once you've run your first audit of a repository, check in the `.secrets.baselin
 
 Likewise, if you see a `.secrets.baseline` file has been checked into GitHub, you won't need to follow the steps in the "[Usage](https://github.com/alphagov/gds-pre-commit#usage)" and "[run your first audit](https://github.com/alphagov/gds-pre-commit#run-your-first-audit)" sections. Simply make sure you have pulled the latest changes before you commit as normal.
 
+### Exclude Files
+
+If you have files which you do not wish to run the scan against, such as a `package-lock.json` or `go.sum` which are automatically generated and have a number of high entropy strings, you can use `--exclude-files *your files*` to ignore these during the scan, this will be noted in `.secrets.baseline` to prevent you having to add this argument during future runs.
+
 ### Caveats
 
 This tool is not a catch-all solution. Take some time to review a [list of secrets not detected by detect-secrets](https://github.com/Yelp/detect-secrets#things-that-wont-be-prevented).
