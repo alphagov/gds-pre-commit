@@ -10,4 +10,8 @@ repos:
     hooks:
     -   id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
-        exclude: .*/tests/.*
+        exclude: .*/tests/.*|
+              (?x)(
+                     ^package-lock.json$/|
+                     ^Pipfile/
+              )
