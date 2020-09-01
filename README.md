@@ -44,7 +44,16 @@ repositories by looking for the baseline file.
 Neither of those on their own give us a good idea of how many 
 commits are being made against alphagov without protection so 
 hopefully in time we can actually report by commit with another 
-hook. 
+hook.
+
+## Privacy
+
+By installing this tool, you will send the GDS Cyber team:
+
+* your name as configured in your global git configuration
+* your email address as configured in your global git configuration
+* your IP address
+* the version of curl installed on your machine
 
 ## Further Reading
 
