@@ -51,7 +51,6 @@ hook.
 1. When running detect-secrets, with `detect-secrets scan --update .secrets.baseline --exclude-files go.sum`
 1. Add to your repository's `.pre-commit-config.yaml`, eg:
 ```
-$ cat .pre-commit-config.yaml
 -   repo: git@github.com:Yelp/detect-secrets
     rev: v0.14.3
     hooks:
