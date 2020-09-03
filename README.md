@@ -53,6 +53,19 @@ commits are being made against alphagov without protection so
 hopefully in time we can actually report by commit with another 
 hook.
 
+## Ignoring secrets
+1. In-line `# pragma: allowlist secret` In any language's comment format.
+1. When running detect-secrets, with `detect-secrets scan --update .secrets.baseline --exclude-files go.sum`
+1. Add to your repository's `.pre-commit-config.yaml`, eg:
+```
+-   repo: git@github.com:Yelp/detect-secrets
+    rev: v0.14.3
+    hooks:
+    -   id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: .*/tests/.*
+```
+
 ## Privacy
 
 By installing this tool, you will send the GDS Cyber team:
