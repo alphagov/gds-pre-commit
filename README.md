@@ -20,10 +20,12 @@ git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
 depending on which version of python you have:
 
 ```shell
+pip install -q pre-commit detect-secrets six
 python ~/.gds-pre-commit/install.py
 ```
 or
 ```shell
+pip3 install -q pre-commit detect-secrets six
 python3 ~/.gds-pre-commit/install.py
 ```
 
