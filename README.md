@@ -17,10 +17,17 @@ your registration to us.
 ```shell
 git clone https://github.com/alphagov/gds-pre-commit.git ~/.gds-pre-commit/
 ```
+depending on which version of python you have:
 
 ```shell
-~/.gds-pre-commit/install.py
+python ~/.gds-pre-commit/install.py
 ```
+or
+```shell
+python3 ~/.gds-pre-commit/install.py
+```
+
+If using `pyenv`, make sure you've chosen a system-wide python executable, that will work no matter what you're working on.
 
 Once you've run the above commands the pre-commit framework will be installed with the detect-secrets plugin added to its config globally for git.
 
