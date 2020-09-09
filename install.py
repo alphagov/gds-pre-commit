@@ -4,9 +4,13 @@ from __future__ import print_function
 import sys
 import os
 
-if "pyenv" in sys.executable:
-    print("pyenv interpreter detected, please install with your system python")
+def detect(subpath, error):  
+    if subpath in sys.executable:
+    print(error)
     sys.exit(1)
+
+detect("pyenv", "pyenv interpreter detected, please install with your system python")
+detect("virtualenvs", "virtualenvironment interpreter detected, please install with your system python")
 
 from register import register
 from runner import run
