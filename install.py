@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-
+import sys
 import os
+
+if "pyenv" in sys.executable:
+    print("pyenv interpreter detected, please install with your system python")
+    sys.exit(1)
 
 from register import register
 from runner import run
