@@ -1,12 +1,12 @@
 # gds-pre-commit Instructions
 
-> NOTE: We used to vendor our own bundle of pre-commit and detect-secrets. This was too brittle for us to support, we now reccomend installing the off-the-shelf tools, as detailed below:
+> NOTE: We used to vendor our own bundle of pre-commit and detect-secrets. This was too brittle for us to support, we now recommend installing the off-the-shelf tools, as detailed below:
 
 Detect Secrets is a tool for preventing secrets being committed to git (https://github.com/Yelp/detect-secrets).
 
 You can add a pre-commit git hook to run detect-secrets automatically using the pre-commit framework.
 
-The tool scans the contents of a commit to see if contains anything that looks sensitive, like an SSH key, an AWS key or an API token. If it detects something that looks like a “secret”, it prevents the commit from going through; otherwise everything works as normal.
+Detect-secrets scans the contents of a commit to see if contains anything that looks sensitive, like an SSH key, an AWS key or an API token. If it detects something that looks like a “secret”, it prevents the commit from going through; otherwise everything works as normal.
 
 This readme will guide you through installing it to your machine.
 
@@ -34,8 +34,6 @@ We have created a `.pre-commit-config.yaml` with detect-secrets enabled in this 
         args: ['--baseline', '.secrets.baseline']
         exclude: .*/tests/.*
 ```
-
-## Privacy
 
 ## Further Reading
 
