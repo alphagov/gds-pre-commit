@@ -35,6 +35,17 @@ We have created a `.pre-commit-config.yaml` with detect-secrets enabled in this 
         exclude: .*/tests/.*
 ```
 
+## What Works And What Doesn't
+
+There are many plugins enabled out of the box, the full list which includes slack tokens, aws keys, and stripe keys, are here: https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins
+
+Most secrets we find are caught by the `high entropy strings` plugin, which checks the randomness of a string. Highly-random strings are very likely to be passwords or keys, the logic goes.
+
+However this has a few surprising edge-cases:
+ - The string `oaisntoiwentoiasrayufntoiarnf` won't trigger it despite a human thinking it looks 'random'. It's just lower case ascii. hardly random at all.
+ - UUIDs aren't caught by it. Again, `27375774-a49e-4fa6-9cb1-c2fdcc43b9d6` looks random, and we might even use it as a fairly secure password, but it's just lower-case hex. Hardly random.
+ - You may even find some short truly random strings slip by because they are short and accidentally don't have enough complexity.
+
 ## Further Reading
 
  - [Usage](usage.md)
