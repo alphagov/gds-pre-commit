@@ -65,7 +65,7 @@ hook.
     hooks:
     -   id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
-        exclude: .*/tests/.*
+        exclude: .*/hashes/.*
 ```
 
 ## Privacy
