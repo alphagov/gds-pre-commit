@@ -1,5 +1,0 @@
-*.pyc
-test-detection
-__pycache__
-.mypy_cache
-.DS_Store
