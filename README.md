@@ -32,7 +32,7 @@ We have created a `.pre-commit-config.yaml` with detect-secrets enabled in this 
     hooks:
     -   id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
-        exclude: .*/tests/.*
+        exclude: .*/hashes/.*
 ```
 
 ## What Works And What Doesn't
