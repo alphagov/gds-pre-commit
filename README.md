@@ -46,6 +46,19 @@ However this has a few surprising edge-cases:
  - UUIDs aren't caught by it. Again, `27375774-a49e-4fa6-9cb1-c2fdcc43b9d6` looks random, and we might even use it as a fairly secure password, but it's just lower-case hex. Hardly random.
  - You may even find some short truly random strings slip by because they are short and accidentally don't have enough complexity.
 
+## Uninstalling The Old Version
+Only one thing is needed to disable our old, customised, version of the pre-commit framework: Remove the global pre-commit hook from git:
+
+``` shell
+git global config --unset-all core.hooksPath
+```
+
+This will not touch the files in the default install path of `~/.gds.pre-commit`. To finish the cleanup, remove this directory.
+
+It could be possible that you have installed the hooks into specific repositories. If so, you can delete the file `[repo]/.git/hooks/pre-commit` to stop that.
+
+Once you've done this, you can look at the Quick Install, above, to install the off-the-shelf version. If you need any help, do pop in to #cyber-security-help!
+
 ## Further Reading
 
  - [Usage](usage.md)
