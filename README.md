@@ -47,7 +47,7 @@ However this has a few surprising edge-cases:
  - You may even find some short truly random strings slip by because they are short and accidentally don't have enough complexity.
 
 ## Uninstalling The Old Version
-Only one thing is needed to disable our old, customised, version of the pre-commit framework: Remove the global pre-commit hook from git:
+Only one thing is needed to disable our old, customised, version of the pre-commit framework - remove the global pre-commit hook from git:
 
 ``` shell
 git global config --unset-all core.hooksPath
