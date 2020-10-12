@@ -59,6 +59,8 @@ It could be possible that you have installed the hooks into specific repositorie
 
 Once you've done this, you can look at the Quick Install, above, to install the off-the-shelf version. If you need any help, do pop in to #cyber-security-help!
 
+N.B. In the old system, we had a global `.pre-commit-config.yaml`, but now each repository you install the pre-commit framework in will require its own config file. Though this is a little more work, it will allow you to take advantage of the language-specific integrations (such as running tests or linting) that the pre-commit framework provides.
+
 ## Further Reading
 
  - [Usage](usage.md)
