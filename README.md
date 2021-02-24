@@ -50,7 +50,7 @@ However this has a few surprising edge-cases:
 Only one thing is needed to disable our old, customised, version of the pre-commit framework - remove the global pre-commit hook from git:
 
 ``` shell
-git --global config --unset-all core.hooksPath
+git config --global --unset-all core.hooksPath
 ```
 
 This will not touch the files in the default install path of `~/.gds.pre-commit`. To finish the cleanup, remove this directory.
