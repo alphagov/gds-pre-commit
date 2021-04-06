@@ -9,7 +9,6 @@ Please note that these hooks are found on the pre-commit website but have not al
 * `check-yaml`
 * `pretty-format-json`
 * `check-merge-conflict`
-* `flake8`
 
 ### Python hooks
 [github.com/pre-commit/pygrep-hooks](https://github.com/pre-commit/pygrep-hooks)
@@ -21,6 +20,9 @@ Please note that these hooks are found on the pre-commit website but have not al
 
 * `bandit`
 
+https://gitlab.com/pycqa/flake8
+
+*`flake8`
 
 ### Ruby hooks
 [github.com/chriskuehl/puppet-pre-commit-hooks](https://github.com/chriskuehl/puppet-pre-commit-hooks)
